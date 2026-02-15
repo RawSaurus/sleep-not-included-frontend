@@ -1,0 +1,18 @@
+<header class="header">
+  <div class="logo">ONI Tools</div>
+
+  <nav>
+    <a routerLink="/home" routerLinkActive="active">Home</a>
+    <a routerLink="/build" routerLinkActive="active">Build</a>
+    <a routerLink="/blueprint" routerLinkActive="active">Blueprint</a>
+    <a routerLink="/profile" routerLinkActive="active">Profile</a>
+  </nav>
+
+  <div>
+    @if (!auth){
+      <button class="btn">Login</button>
+    } @else {
+      <button>Logout</button>
+    }
+  </div>
+</header>

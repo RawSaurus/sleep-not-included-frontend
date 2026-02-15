@@ -1,1 +1,206 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-900: #0F1115;
+  --bg-800: #161A21;
+  --bg-700: #1E242E;
+  --primary: #3DB4F2;
+  --primary-hover: #5EC2FF;
+  --text-primary: #F2F4F8;
+  --text-secondary: #A9B1BD;
+  --danger: #E74C3C;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-900);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.header {
+  height: 72px;
+  background: var(--bg-800);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--bg-700);
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+}
+
+.nav a {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.nav a.active,
+.nav a:hover {
+  color: var(--primary);
+}
+
+.auth-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  transition: 0.2s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #000;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-outline {
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+}
+
+.card {
+  background: var(--bg-800);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.build-card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.build-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.search-bar {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-700);
+  border: none;
+  border-radius: 8px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+}
+
+.dropdown {
+  background: var(--bg-700);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background: var(--bg-800);
+  border-radius: 8px;
+  padding: 8px;
+  display: none;
+  min-width: 150px;
+}
+
+.dropdown-menu div {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-menu div:hover {
+  background: var(--bg-700);
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+/* Blueprint */
+.blueprint-bg {
+  min-height: 100vh;
+  background-color: #0B3A5B;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Auth */
+.auth-card {
+  max-width: 420px;
+  margin: 100px auto;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--bg-700);
+}
+
+.tab.active {
+  background: var(--primary);
+  color: #000;
+}
+

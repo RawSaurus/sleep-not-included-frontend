@@ -1,0 +1,15 @@
+.build-detail {
+  max-width: 900px;
+}
+
+.build-detail-img {
+  width: 100%;
+  border-radius: 16px;
+  margin: 24px 0;
+}
+
+.description {
+  margin-top: 24px;
+  font-size: 16px;
+  color: var(--text-secondary);
+}

@@ -1,0 +1,31 @@
+@if (build) {
+
+  <div class="container build-detail">
+
+    <h1>{{ build.name }}</h1>
+
+    <img
+      [src]="build.image"
+      class="build-detail-img"
+      alt="Build Image"
+    />
+
+    <div class="build-meta">
+      ❤️ {{ build.likes }} Likes
+      • {{ build.createdAt }}
+      • {{ build.dlc }}
+    </div>
+
+    <div class="tags">
+      @for (tag of build.tags; track tag) {
+        <span class="tag">{{ tag }}</span>
+      }
+    </div>
+
+    <p class="description">
+      {{ build.description }}
+    </p>
+
+  </div>
+
+}

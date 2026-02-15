@@ -1,0 +1,14 @@
+<div class="container">
+
+  <div class="build-header">
+    <h2>Community Builds</h2>
+    <button class="btn btn-primary">+ Create Build</button>
+  </div>
+
+  <div class="grid grid-3">
+    @for (build of builds; track build.id) {
+      <app-build-card [build]="build" />
+    }
+  </div>
+
+</div>
