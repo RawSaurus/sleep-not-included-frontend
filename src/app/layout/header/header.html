@@ -5,6 +5,41 @@
     <a routerLink="/home" routerLinkActive="active">Home</a>
     <a routerLink="/build" routerLinkActive="active">Build</a>
     <a routerLink="/blueprint" routerLinkActive="active">Blueprint</a>
+
+    <div class="dropdown" [ngClass]="{ open: calculatorOpen() }">
+
+      <button
+        class="dropdown-trigger"
+        (click)="toggleCalculator()"
+        type="button"
+        aria-haspopup="true"
+        aria-expanded="{{ calculatorOpen() }}"
+      >
+        Calculator
+        <span class="arrow" [ngClass]="{ rotate: calculatorOpen() }">▼</span>
+      </button>
+
+      @if(calculatorOpen()){
+      <div class = "dropdown-menu">
+
+        <a
+        routerLink = "/calculator/rocket"
+        routerLinkActive = "active"
+        (click) = "closeDropdown()"
+          >
+        🚀 Rocket Calculator
+      </a>
+
+      <a
+        routerLink = "/calculator/ranch"
+        routerLinkActive = "active"
+        (click) = "closeDropdown()"
+          >
+        🐄 Ranch Calculator
+      </a >
+      </div >
+      }
+      </div >
     <a routerLink="/profile" routerLinkActive="active">Profile</a>
   </nav>
 
