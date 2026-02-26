@@ -1,0 +1,128 @@
+<form [formGroup]="rocketForm" (ngSubmit)="calculate()" class="calculator-form">
+
+  <!-- Desired Range Section -->
+  <div formGroupName="range" class="calc-section">
+    <label class="section-label">Desired Range</label>
+    <select formControlName="desiredRange" class="section-input">
+      @for(option of rangeOptions; track option.value) {
+        <option [value]="option.value">
+          {{ option.label }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div formGroupName="engine" class="calc-section">
+    <label class="section-label">Engine</label>
+    <select formControlName="type" class="section-input">
+      @for(option of engineOptions; track option.label) {
+        <option [value]="option.label">
+          {{ option.label }}
+        </option>
+      }
+    </select>
+    <label class="section-label">Solid fuel thrusters</label>
+    <input
+      type="number"
+      formControlName="solidFuelThrusters"
+      placeholder="0"
+      class="section-input"
+    />
+  </div>
+
+  <!-- Fuel Section -->
+  <div formGroupName="fuel" class="calc-section">
+    <label class="section-label">Fuel tanks</label>
+    <input
+      type="number"
+      formControlName="fuelTanks"
+      placeholder="Enter amount of tanks"
+      class="section-input"
+    />
+    <label class="section-label">Fuel amount</label>
+    <input
+      type="number"
+      formControlName="fuelAmount"
+      placeholder="Enter fuel amount"
+      class="section-input"
+    />
+  </div>
+
+  @if (rocketForm.get("engine.type")?.value !== 'Steam') {
+    <div formGroupName="oxidizer" class="calc-section">
+      <label class="section-label-header">Oxidizer</label>
+      <label class="section-label">Oxidizer Type</label>
+      <select formControlName="oxidizerType" class="section-input">
+        @for(option of oxidizerOptions; track option.value) {
+          <option [value]="option.value">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+      <label class="section-label">Oxidizer Tanks</label>
+      <input
+        type="number"
+        formControlName="oxidizerTanks"
+        class="section-input"
+      />
+      <label class="section-label">Fuel</label>
+      <input
+        type="number"
+        formControlName="oxidizerAmount"
+        class="section-input"
+      />
+    </div>
+  }
+
+  <div formGroupName="modules" class="calc-section">
+    <label class="section-label-header">Modules</label>
+    <label class="section-label">Command Capsule</label>
+    <input
+      type="number"
+      formControlName="commandCapsule"
+      class="section-input"
+    />
+    <label class="section-label">Solid Cargo Bays</label>
+    <input
+      type="number"
+      formControlName="cargoBay"
+      class="section-input"
+    />
+    <label class="section-label">Liquid Cargo Tanks</label>
+    <input
+      type="number"
+      formControlName="liquidCargoTank"
+      class="section-input"
+    />
+    <label class="section-label">Research Modules</label>
+    <input
+      type="number"
+      formControlName="researchModule"
+      class="section-input"
+    />
+    <label class="section-label">Gas Cargo Canisters</label>
+    <input
+      type="number"
+      formControlName="gasCargoTank"
+      class="section-input"
+    />
+    <label class="section-label">Biological Cargo Bays</label>
+    <input
+      type="number"
+      formControlName="biologicalCargoBay"
+      class="section-input"
+    />
+    <label class="section-label">Sight-Seeing Modules</label>
+    <input
+      type="number"
+      formControlName="sightSeeingModule"
+      class="section-input"
+    />
+  </div>
+
+  <!-- Action -->
+  <button type="submit" class="calculate-btn">
+    Calculate
+  </button>
+
+</form>
