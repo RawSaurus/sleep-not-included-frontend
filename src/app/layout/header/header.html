@@ -43,11 +43,13 @@
     <a routerLink="/profile" routerLinkActive="active">Profile</a>
   </nav>
 
+  <button class="btn" (click)="test()">Test</button>
   <div>
-    @if (!auth){
-      <button class="btn">Login</button>
+    @if (!authService.isLoggedIn){
+      <button class="btn" (click)="authService.login()">Login</button>
+      <button class="btn" (click)="register()">Register</button>
     } @else {
-      <button>Logout</button>
+      <button class="btn" (click)="authService.logout()">Logout</button>
     }
   </div>
 </header>
