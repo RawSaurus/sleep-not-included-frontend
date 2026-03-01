@@ -6,7 +6,14 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "openapi:generate:all": "npm run openapi:generate:user && npm run openapi:generate:build && npm run openapi:generate:comment && npm run openapi:generate:tag && npm run openapi:generate:gameres && npm run openapi:generate:image",
+    "openapi:generate:user": "openapi-generator-cli generate -i http://localhost:8081/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/user-service",
+    "openapi:generate:build": "openapi-generator-cli generate -i http://localhost:8082/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/build-service",
+    "openapi:generate:comment": "openapi-generator-cli generate -i http://localhost:8083/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/comment-service",
+    "openapi:generate:tag": "openapi-generator-cli generate -i http://localhost:8084/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/tag-service",
+    "openapi:generate:gameres": "openapi-generator-cli generate -i http://localhost:8085/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/gameres-service",
+    "openapi:generate:image": "openapi-generator-cli generate -i http://localhost:8086/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/image-service"
   },
   "prettier": {
     "printWidth": 100,
@@ -38,6 +45,7 @@
     "@angular/build": "^20.2.3",
     "@angular/cli": "^20.2.3",
     "@angular/compiler-cli": "^20.2.3",
+    "@openapitools/openapi-generator-cli": "^2.30.0",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^3.2.4"

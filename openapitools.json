@@ -1,0 +1,100 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.2.0",
+    "generators": {
+      "user-service": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8081/api/v1/v3/api-docs",
+        "output": "./src/app/api/user-service",
+        "additionalProperties": {
+          "npmName": "@app/user-service-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "build-service": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8082/api/v1/v3/api-docs",
+        "output": "./src/app/api/build-service",
+        "additionalProperties": {
+          "npmName": "@app/build-service-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "comment-service": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8083/api/v1/v3/api-docs",
+        "output": "./src/app/api/comment-service",
+        "additionalProperties": {
+          "npmName": "@app/comment-service-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "tag-service": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8084/api/v1/v3/api-docs",
+        "output": "./src/app/api/tag-service",
+        "additionalProperties": {
+          "npmName": "@app/tag-service-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "gameres-service": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8085/api/v1/v3/api-docs",
+        "output": "./src/app/api/gameres-service",
+        "additionalProperties": {
+          "npmName": "@app/gameres-service-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "image-service": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8086/api/v1/v3/api-docs",
+        "output": "./src/app/api/image-service",
+        "additionalProperties": {
+          "npmName": "@app/image-service-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      },
+      "all-services": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "http://localhost:8080/v3/api-docs",
+        "output": "./src/app/api/all-services",
+        "additionalProperties": {
+          "npmName": "@app/all-services-api",
+          "ngVersion": "20.2.3",
+          "serviceSuffix": "Service",
+          "modelSuffix": "DTO",
+          "withInterfaces": true,
+          "useSingleRequestParameter": true
+        }
+      }
+    }
+  }
+}

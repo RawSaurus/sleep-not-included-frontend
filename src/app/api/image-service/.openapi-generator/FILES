@@ -1,0 +1,15 @@
+.gitignore
+.openapi-generator-ignore
+README.md
+api.module.ts
+api/api.ts
+api/gameResController.service.ts
+configuration.ts
+encoder.ts
+git_push.sh
+index.ts
+model/gameResRequest.ts
+model/gameResResponse.ts
+model/models.ts
+param.ts
+variables.ts
