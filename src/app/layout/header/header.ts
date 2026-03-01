@@ -3,7 +3,8 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NgClass} from '@angular/common';
 import {AuthService} from '../../auth/auth.service';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpContext, HttpRequest, HttpResponse} from '@angular/common/http';
+import {RequestParameter} from '@angular/cli/src/analytics/analytics-parameters';
 
 export interface UserResponse {
   id: number;
@@ -49,7 +50,7 @@ export class Header {
       '&redirect_uri=http://localhost:4200/' + window.location.origin;
   }
 
-  test(){
+  test() {
     this.getCurrentUser().subscribe({
       next: (response) => {
         console.log(response);
@@ -57,10 +58,12 @@ export class Header {
     });
   }
 
-  getCurrentUser(): Observable<UserResponse> {
-    return this.http.get<UserResponse>('http://localhost:8080/user/1');
+  getCurrentUser(){
+    // let rq = new HttpRequest('GET', 'http://localhost:8080/user/1');
+    // rq.headers.set('Authorization', 'Bearer ' + this.authService.accessToken);
+    // return this.http.request<UserResponse>(rq);
+    return this.http.get<UserResponse>('http://localhost:8080/test');
   }
-
 
   @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {

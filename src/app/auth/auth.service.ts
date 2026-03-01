@@ -7,10 +7,9 @@ import {authConfig} from './auth.config';
 })
 export class AuthService{
 
-  oauthService = inject(OAuthService);
+  // oauthService = inject(OAuthService);
 
-  constructor() {
-    this.initAuth();
+  constructor(private oauthService: OAuthService) {
   }
 
   async initAuth(): Promise<void>{
