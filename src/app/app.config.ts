@@ -10,6 +10,7 @@ import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {authInterceptor} from './auth/auth.interceptor';
 import {OAuthService, provideOAuthClient} from 'angular-oauth2-oidc';
 import {AuthService} from './auth/auth.service';
+import {Configuration} from './api/build-service';
 
 
 export const appConfig: ApplicationConfig = {
@@ -20,6 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAppInitializer(() =>
       inject(AuthService).initAuth()),
-    provideHttpClient(withInterceptors([authInterceptor]))
+    provideHttpClient(withInterceptors([authInterceptor])),
   ]
 };

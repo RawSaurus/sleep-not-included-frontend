@@ -1,6 +1,6 @@
 <div class="card build-card">
 
-  <img [src]="build().image" alt="Build Image" />
+  <img [src]="" alt="Build Image" />
 
   <div class="build-content">
     <h3 class="build-title">
@@ -11,18 +11,17 @@
 
     <div class="build-meta">
       ❤️ {{ build().likes }} Likes
-      • {{ build().createdAt }}
     </div>
 
     <p class="build-desc">
       {{ build().description }}
     </p>
 
-    <div class="tags">
-      @for (tag of build().tags; track tag) {
-        <span class="tag">{{ tag }}</span>
-      }
-    </div>
+<!--    <div class="tags">-->
+<!--      @for (tag of build().tags; track tag) {-->
+<!--        <span class="tag">{{ tag }}</span>-->
+<!--      }-->
+<!--    </div>-->
   </div>
 
 </div>

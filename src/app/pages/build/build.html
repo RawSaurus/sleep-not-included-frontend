@@ -5,10 +5,35 @@
     <button class="btn btn-primary">+ Create Build</button>
   </div>
 
-  <div class="grid grid-3">
-    @for (build of builds; track build.id) {
-      <app-build-card [build]="build" />
-    }
-  </div>
+  <button class="btn btn-primary" (click)="test()">Test</button>
 
+  @if (isLoading()) {
+    <div class="loading">Loading builds...</div>
+  }
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  @if (!isLoading() && !error()) {
+    <div class="grid grid-3">
+      @for (build of builds(); track build.id) {
+        <app-build-card [build]="build" />
+      }
+    </div>
+
+    @if (builds().length === 0) {
+      <p class="empty">No builds found.</p>
+    }
+
+    <div class="pagination">
+      <button class="btn" [disabled]="currentPage() === 0" (click)="prevPage()">
+        ← Previous
+      </button>
+      <span>Page {{ currentPage() + 1 }} of {{ totalPages() }}</span>
+      <button class="btn" [disabled]="currentPage() >= totalPages() - 1" (click)="nextPage()">
+        Next →
+      </button>
+    </div>
+  }
 </div>

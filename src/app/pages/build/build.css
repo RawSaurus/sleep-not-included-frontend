@@ -4,3 +4,74 @@
   align-items: center;
   margin-bottom: 32px;
 }
+
+/* ── State Feedback ──────────────────────────────────── */
+.loading,
+.empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 48px 0;
+  font-size: 15px;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  border: 2px solid var(--primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: 8px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+/* ── Pagination ──────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: var(--text-secondary);
+  min-width: 120px;
+  text-align: center;
+}
+
+.pagination .btn {
+  background: var(--bg-700);
+  color: var(--text-primary);
+  border: 1px solid transparent;
+  padding: 8px 20px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.pagination .btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.pagination .btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
