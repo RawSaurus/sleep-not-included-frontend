@@ -15,8 +15,8 @@ import { SortObject } from './sortObject';
 
 
 export interface PageBuildResLoggedIn { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<BuildResLoggedIn>;
     number?: number;

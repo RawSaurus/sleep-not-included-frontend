@@ -13,7 +13,9 @@
 
 export interface UserResponse { 
     id?: number;
+    keycloakId?: string;
     username?: string;
+    email?: string;
     role?: UserResponse.RoleEnum;
     createdAt?: string;
 }

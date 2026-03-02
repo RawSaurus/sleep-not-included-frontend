@@ -44,17 +44,17 @@ export class Build {
   }
 
   test(){
-    this.http.get('http://localhost:8080/build/1').subscribe({
-      next: (response) => {
-        console.log('Build by ID: ', response);
-      }
-    });
-    // this.controller.findById(1)
-    //   .subscribe({
-    //     next: (response) => {
-    //       console.log('Build by ID: ', response);
-    //     }
-    //   });
+    // this.http.get('http://localhost:8080/build/1').subscribe({
+    //   next: (response) => {
+    //     console.log('Build by ID: ', response);
+    //   }
+    // });
+    this.controller.findById(1)
+      .subscribe({
+        next: (response) => {
+          console.log('Build by ID: ', response);
+        }
+      });
   }
 
   loadBuilds(): void {

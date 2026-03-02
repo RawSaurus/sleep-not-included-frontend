@@ -1,31 +1,31 @@
-@if (build) {
+@if (isLoading()) {
+  <div class="container">
+    <p class="loading">Loading build...</p>
+  </div>
+}
 
+@if (error()) {
+  <div class="container">
+    <p class="error">{{ error() }}</p>
+  </div>
+}
+
+@if (build(); as b) {
   <div class="container build-detail">
 
-    <h1>{{ build.name }}</h1>
-
-    <img
-      [src]="build.image"
-      class="build-detail-img"
-      alt="Build Image"
-    />
+    <h1>{{ b.name }}</h1>
 
     <div class="build-meta">
-      ❤️ {{ build.likes }} Likes
-      • {{ build.createdAt }}
-      • {{ build.dlc }}
-    </div>
-
-    <div class="tags">
-      @for (tag of build.tags; track tag) {
-        <span class="tag">{{ tag }}</span>
-      }
+      ❤️ {{ b.likes ?? 0 }} Likes
     </div>
 
     <p class="description">
-      {{ build.description }}
+      {{ b.description ?? 'No description provided.' }}
     </p>
 
-  </div>
+    <div class="build-footer">
+      <span class="creator">By user #{{ b.creatorId }}</span>
+    </div>
 
+  </div>
 }

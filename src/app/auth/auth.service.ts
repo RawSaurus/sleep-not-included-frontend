@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {authConfig} from './auth.config';
+import {UserControllerService} from '../api/user-service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import {authConfig} from './auth.config';
 export class AuthService{
 
   // oauthService = inject(OAuthService);
+  userController = inject(UserControllerService);
 
   constructor(private oauthService: OAuthService) {
   }
@@ -19,12 +21,16 @@ export class AuthService{
     if(!this.oauthService.hasValidAccessToken()){
       this.login();
     }
+    this.userController.checkKeycloakAndCreateUser(this.userProfile['sub'])
+      .subscribe();
 
     this.oauthService.setupAutomaticSilentRefresh()
   }
 
   login(){
     this.oauthService.initCodeFlow();
+    this.userController.checkKeycloakAndCreateUser(this.userProfile['sub'])
+      .subscribe();
   }
 
   logout(){
