@@ -1,7 +1,10 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BuildService} from '../../../services/build';
 import {BuildControllerService, BuildResponse} from '../../../api/build-service';
+import {BuildEnrichmentService} from '../../../services/build-enrichment.service';
+import {BuildEnrichedModel} from '../../../models/build-enriched.model';
+import {switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-build-detail',
@@ -9,7 +12,7 @@ import {BuildControllerService, BuildResponse} from '../../../api/build-service'
   templateUrl: './build-detail.html',
   styleUrl: './build-detail.css',
 })
-export class BuildDetail {
+export class BuildDetail implements OnInit{
   // private route = inject(ActivatedRoute);
   // private service = inject(BuildService);
   //
@@ -18,8 +21,9 @@ export class BuildDetail {
   // );
   private route = inject(ActivatedRoute);
   private buildController = inject(BuildControllerService);
+  private enrichment = inject(BuildEnrichmentService);
 
-  build = signal<BuildResponse | null>(null);
+  build = signal<BuildEnrichedModel | null>(null);
   isLoading = signal(true);
   error = signal<string | null>(null);
 
@@ -27,6 +31,7 @@ export class BuildDetail {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.buildController.findById(id)
+      .pipe(switchMap((build) => this.enrichment.enrichOne(build)))
       .subscribe({
         next: (res) => {
           this.build.set(res);

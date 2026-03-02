@@ -1,9 +1,12 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {BuildService} from '../../services/build';
 import {BuildCard} from './build-card/build-card';
 import {BuildControllerService, BuildResponse} from '../../api/build-service';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
+import {BuildEnrichmentService} from '../../services/build-enrichment.service';
+import {switchMap} from 'rxjs';
+import {BuildEnrichedModel} from '../../models/build-enriched.model';
 
 @Component({
   selector: 'app-build',
@@ -14,12 +17,13 @@ import {RouterLink} from '@angular/router';
   templateUrl: './build.html',
   styleUrl: './build.css',
 })
-export class Build {
+export class Build implements OnInit{
 
   private controller = inject(BuildControllerService);
   private http = inject(HttpClient);
+  private enrichment = inject(BuildEnrichmentService);
 
-  builds = signal<BuildResponse[]>([]);
+  builds = signal<BuildEnrichedModel[]>([]);
   isLoading = signal(false);
   error = signal<string | null>(null);
 
@@ -53,11 +57,17 @@ export class Build {
 
     this.controller
       .findAll(this.currentPage(), this.pageSize(), 'name', 'asc')
+      .pipe(
+        switchMap((page) => {
+          this.totalPages.set(page.totalPages ?? 0);
+          return this.enrichment.enrichAll(page.content ?? []);
+        })
+      )
       .subscribe({
         next: (page) => {
-          console.log(page);
-          this.builds.set(page.content ?? []);
-          this.totalPages.set(page.totalPages ?? 0);
+          // console.log(page);
+          this.builds.set(page ?? []);
+          // this.totalPages.set(page.totalPages ?? 0);
           this.isLoading.set(false);
         },
         error: (err) => {

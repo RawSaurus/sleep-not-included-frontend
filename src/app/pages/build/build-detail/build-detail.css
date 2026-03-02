@@ -3,7 +3,7 @@
 }
 
 .build-detail-img {
-  width: 100%;
+  width: 20%;
   border-radius: 16px;
   margin: 24px 0;
 }
@@ -12,4 +12,18 @@
   margin-top: 24px;
   font-size: 16px;
   color: var(--text-secondary);
+}
+
+.build-images { margin-top: 32px; }
+.build-images h3 { margin-bottom: 16px; }
+.build-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.build-img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  aspect-ratio: 16/9;
 }

@@ -19,6 +19,16 @@
       ❤️ {{ b.likes ?? 0 }} Likes
     </div>
 
+    @if (b.thumbnailUrl) {
+      <img [src]="b.thumbnailUrl" class="build-detail-img" alt="Build thumbnail" />
+    }
+
+    <div class="tags">
+      @for (tag of b.tags; track tag.id) {
+        <span class="tag">{{ tag.name }}</span>
+      }
+    </div>
+
     <p class="description">
       {{ b.description ?? 'No description provided.' }}
     </p>
@@ -26,6 +36,17 @@
     <div class="build-footer">
       <span class="creator">By user #{{ b.creatorId }}</span>
     </div>
+
+    @if (b.buildImageUrls.length > 0) {
+      <div class="build-images">
+        <h3>Build Images</h3>
+        <div class="build-images-grid">
+          @for (url of b.buildImageUrls; track url) {
+            <img [src]="url" alt="Build image" class="build-img" />
+          }
+        </div>
+      </div>
+    }
 
   </div>
 }

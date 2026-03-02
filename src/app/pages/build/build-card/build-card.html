@@ -1,6 +1,10 @@
 <div class="card build-card">
 
-  <img [src]="" alt="Build Image" />
+  @if (build().thumbnailUrl) {
+    <img [src]="build().thumbnailUrl" alt="Build thumbnail" />
+  } @else {
+    <div class="no-thumbnail">No image</div>
+  }
 
   <div class="build-content">
     <h3 class="build-title">
@@ -16,6 +20,12 @@
     <p class="build-desc">
       {{ build().description }}
     </p>
+
+    <div class="tags">
+      @for (tag of build().tags; track tag.id) {
+        <span class="tag">{{ tag.name }}</span>
+      }
+    </div>
 
     <div class="build-footer">
       <span class="creator">By user #{{ build().creatorId }}</span>
