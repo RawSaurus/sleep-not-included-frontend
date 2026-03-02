@@ -12,8 +12,8 @@
     "openapi:generate:build": "openapi-generator-cli generate -i http://localhost:8082/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/build-service",
     "openapi:generate:comment": "openapi-generator-cli generate -i http://localhost:8083/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/comment-service",
     "openapi:generate:tag": "openapi-generator-cli generate -i http://localhost:8084/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/tag-service",
-    "openapi:generate:gameres": "openapi-generator-cli generate -i http://localhost:8085/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/gameres-service",
-    "openapi:generate:image": "openapi-generator-cli generate -i http://localhost:8086/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/image-service"
+    "openapi:generate:image": "openapi-generator-cli generate -i http://localhost:8085/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/image-service",
+    "openapi:generate:gameres": "openapi-generator-cli generate -i http://localhost:8086/api/v1/v3/api-docs -g typescript-angular -o ./src/app/api/gameres-service"
   },
   "prettier": {
     "printWidth": 100,

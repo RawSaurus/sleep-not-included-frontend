@@ -1,2 +1,2 @@
-export * from './gameResRequest';
-export * from './gameResResponse';
+export * from './imageResponse';
+export * from './updateImageRequest';

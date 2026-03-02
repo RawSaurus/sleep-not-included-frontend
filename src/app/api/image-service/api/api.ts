@@ -1,3 +1,3 @@
-export * from './gameResController.service';
-import { GameResControllerService } from './gameResController.service';
-export const APIS = [GameResControllerService];
+export * from './imageController.service';
+import { ImageControllerService } from './imageController.service';
+export const APIS = [ImageControllerService];
