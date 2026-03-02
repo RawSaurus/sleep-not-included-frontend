@@ -1,0 +1,129 @@
+<div class="container create-page">
+
+  <div class="create-header">
+    <h2>Create Build</h2>
+    <button class="btn btn-outline" (click)="cancel()">✕ Cancel</button>
+  </div>
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  <div class="create-form">
+
+    <!-- Name -->
+    <div class="field">
+      <label class="field-label">Build Name <span class="required">*</span></label>
+      <input
+        class="field-input"
+        type="text"
+        placeholder="e.g. Efficient SPOM v2"
+        [value]="name()"
+        (input)="name.set($any($event.target).value)"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="field">
+      <label class="field-label">Description</label>
+      <textarea
+        class="field-input field-textarea"
+        placeholder="Describe your build, how it works, tips..."
+        rows="5"
+        [value]="description()"
+        (input)="description.set($any($event.target).value)"
+      ></textarea>
+    </div>
+
+    <!-- Tags -->
+    <div class="field">
+      <label class="field-label">Tags</label>
+      <div class="tag-grid">
+        @for (tag of availableTags(); track tag.id) {
+          <button
+            type="button"
+            class="tag-toggle"
+            [class.selected]="isTagSelected(tag.id)"
+            (click)="toggleTag(tag.id)"
+          >
+            {{ tag.name }}
+          </button>
+        }
+        @if (availableTags().length === 0) {
+          <span class="tag-empty">Loading tags...</span>
+        }
+      </div>
+    </div>
+
+    <!-- Thumbnail -->
+    <div class="field">
+      <label class="field-label">Thumbnail</label>
+      <div class="upload-area" [class.has-preview]="thumbnailPreview()">
+        @if (thumbnailPreview()) {
+          <img class="thumbnail-preview" [src]="thumbnailPreview()" alt="Thumbnail preview" />
+          <button type="button" class="remove-thumb" (click)="thumbnailFile.set(null); thumbnailPreview.set(null)">
+            ✕ Remove
+          </button>
+        } @else {
+          <div class="upload-placeholder">
+            <span class="upload-icon">🖼️</span>
+            <span>Click to upload thumbnail</span>
+            <span class="upload-hint">JPEG or PNG, 16:9 recommended</span>
+          </div>
+        }
+        <input
+          class="upload-input"
+          type="file"
+          accept="image/jpeg,image/png"
+          (change)="onThumbnailSelected($event)"
+        />
+      </div>
+    </div>
+
+    <!-- Build Images -->
+    <div class="field">
+      <label class="field-label">Build Images</label>
+      <div class="upload-area multi">
+        <div class="upload-placeholder">
+          <span class="upload-icon">📷</span>
+          <span>Click to add build images</span>
+          <span class="upload-hint">Multiple files allowed</span>
+        </div>
+        <input
+          class="upload-input"
+          type="file"
+          accept="image/jpeg,image/png"
+          multiple
+          (change)="onBuildImagesSelected($event)"
+        />
+      </div>
+
+      @if (buildImagePreviews().length > 0) {
+        <div class="image-preview-grid">
+          @for (preview of buildImagePreviews(); track $index) {
+            <div class="image-preview-item">
+              <img [src]="preview" alt="Build image {{ $index + 1 }}" />
+              <button type="button" class="remove-img" (click)="removeBuildImage($index)">✕</button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button class="btn btn-outline" (click)="cancel()" [disabled]="isSubmitting()">
+        Cancel
+      </button>
+      <button class="btn btn-primary" (click)="submit()" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          Saving...
+        } @else {
+          Save Build
+        }
+      </button>
+    </div>
+
+  </div>
+
+</div>

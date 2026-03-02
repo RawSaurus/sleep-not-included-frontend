@@ -4,6 +4,7 @@ export const routes: Routes = [
   { path: '', loadComponent: () => import('./pages/home/home').then(m => m.Home) },
   { path: 'home', loadComponent: () => import('./pages/home/home').then(m => m.Home) },
   { path: 'build', loadComponent: () => import('./pages/build/build').then(m => m.Build) },
+  { path: 'build/create', loadComponent: () => import('./pages/build/build-create/build-create').then(m => m.BuildCreate) },
   { path: 'build/:id', loadComponent: () => import('./pages/build/build-detail/build-detail').then(m => m.BuildDetail) },
   {
     path: 'calculator/rocket',

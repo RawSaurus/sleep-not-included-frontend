@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.module.ts
 api/api.ts
@@ -10,6 +9,5 @@ git_push.sh
 index.ts
 model/imageResponse.ts
 model/models.ts
-model/updateImageRequest.ts
 param.ts
 variables.ts

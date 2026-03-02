@@ -3,31 +3,21 @@ import {BuildService} from '../../services/build';
 import {BuildCard} from './build-card/build-card';
 import {BuildControllerService, BuildResponse} from '../../api/build-service';
 import {HttpClient} from '@angular/common/http';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-build',
   imports: [
-    BuildCard
+    BuildCard,
+    RouterLink
   ],
   templateUrl: './build.html',
   styleUrl: './build.css',
 })
 export class Build {
 
-  // private service = inject(BuildService);
   private controller = inject(BuildControllerService);
   private http = inject(HttpClient);
-
-  // builds = this.service.getAll();
-  // buildRes: BuildResponse[]= [];
-
-  // test(){
-  //   this.controller.findAll().subscribe({
-  //       next: (response) => {
-  //         this.buildRes = response.content ?? [];
-  //       }
-  //     })
-  // }
 
   builds = signal<BuildResponse[]>([]);
   isLoading = signal(false);
