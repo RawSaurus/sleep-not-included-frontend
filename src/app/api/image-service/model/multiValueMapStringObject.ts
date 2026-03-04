@@ -11,14 +11,11 @@
  */
 
 
-export interface ImageResponse { 
-    id?: number;
-    filename?: string;
-    type?: string;
-    size?: number;
-    url?: string;
-    storagePath?: string;
-    ownerId?: number;
-    createdAt?: string;
+export interface MultiValueMapStringObject { 
+  [key: string]: any | any;
+
+
+    all?: { [key: string]: any; } | null;
+    empty?: any | null;
 }
 

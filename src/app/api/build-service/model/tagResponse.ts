@@ -9,15 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SortObject } from './sortObject';
 
 
-export interface PageableObject { 
-    offset?: number;
-    sort?: SortObject;
-    pageNumber?: number;
-    pageSize?: number;
-    paged?: boolean;
-    unpaged?: boolean;
+export interface TagResponse { 
+    id?: number;
+    name?: string;
+    type?: TagResponse.TypeEnum;
 }
+export namespace TagResponse {
+    export type TypeEnum = 'DLC' | 'BUILD';
+    export const TypeEnum = {
+        Dlc: 'DLC' as TypeEnum,
+        Build: 'BUILD' as TypeEnum
+    };
+}
+
 

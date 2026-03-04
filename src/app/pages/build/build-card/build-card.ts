@@ -1,8 +1,6 @@
 import {Component, input} from '@angular/core';
-import {BuildModel} from '../../../models/build.model';
 import {RouterLink} from '@angular/router';
-import {BuildResponse} from '../../../api/build-service';
-import {BuildEnrichedModel} from '../../../models/build-enriched.model';
+import {BuildDetailResponse, BuildResponse} from '../../../api/build-service';
 
 @Component({
   selector: 'app-build-card',
@@ -14,6 +12,6 @@ import {BuildEnrichedModel} from '../../../models/build-enriched.model';
 })
 export class BuildCard {
 
-  build = input.required<BuildEnrichedModel>();
+  build = input.required<BuildDetailResponse>();
 
 }

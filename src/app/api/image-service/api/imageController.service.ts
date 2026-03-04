@@ -20,6 +20,8 @@ import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
 import { ImageResponse } from '../model/imageResponse';
+// @ts-ignore
+import { MultiValueMapStringObject } from '../model/multiValueMapStringObject';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -110,10 +112,10 @@ export class ImageControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteImage(serviceName: string, ownerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<object>;
-    public deleteImage(serviceName: string, ownerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<HttpResponse<object>>;
-    public deleteImage(serviceName: string, ownerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<HttpEvent<object>>;
-    public deleteImage(serviceName: string, ownerId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<any> {
+    public deleteImage(serviceName: string, ownerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<object>;
+    public deleteImage(serviceName: string, ownerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<object>>;
+    public deleteImage(serviceName: string, ownerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<object>>;
+    public deleteImage(serviceName: string, ownerId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (serviceName === null || serviceName === undefined) {
             throw new Error('Required parameter serviceName was null or undefined when calling deleteImage.');
         }
@@ -127,7 +129,7 @@ export class ImageControllerService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                '*/*'
+                'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -170,10 +172,10 @@ export class ImageControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public downloadBuildImages(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<Array<Blob>>;
-    public downloadBuildImages(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<HttpResponse<Array<Blob>>>;
-    public downloadBuildImages(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<HttpEvent<Array<Blob>>>;
-    public downloadBuildImages(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<any> {
+    public downloadBuildImages(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<MultiValueMapStringObject>;
+    public downloadBuildImages(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<HttpResponse<MultiValueMapStringObject>>;
+    public downloadBuildImages(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<HttpEvent<MultiValueMapStringObject>>;
+    public downloadBuildImages(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<any> {
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling downloadBuildImages.');
         }
@@ -184,7 +186,7 @@ export class ImageControllerService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                'image/jpeg'
+                'multipart/mixed'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -210,7 +212,7 @@ export class ImageControllerService {
         }
 
         let localVarPath = `/image/download/build-images/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<Array<Blob>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<MultiValueMapStringObject>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -280,6 +282,76 @@ export class ImageControllerService {
     }
 
     /**
+     * @param ownerService 
+     * @param ownerIds 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findAllByOwnerIds(ownerService: string, ownerIds: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ImageResponse>>;
+    public findAllByOwnerIds(ownerService: string, ownerIds: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ImageResponse>>>;
+    public findAllByOwnerIds(ownerService: string, ownerIds: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ImageResponse>>>;
+    public findAllByOwnerIds(ownerService: string, ownerIds: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (ownerService === null || ownerService === undefined) {
+            throw new Error('Required parameter ownerService was null or undefined when calling findAllByOwnerIds.');
+        }
+        if (ownerIds === null || ownerIds === undefined) {
+            throw new Error('Required parameter ownerIds was null or undefined when calling findAllByOwnerIds.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (ownerIds) {
+            ownerIds.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'ownerIds');
+            })
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/image/owner/${this.configuration.encodeParam({name: "ownerService", value: ownerService, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/batch`;
+        return this.httpClient.request<Array<ImageResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -337,13 +409,21 @@ export class ImageControllerService {
     }
 
     /**
+     * @param ownerService 
+     * @param ownerId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public test(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<string>;
-    public test(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<HttpResponse<string>>;
-    public test(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<HttpEvent<string>>;
-    public test(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<any> {
+    public findByOwner(ownerService: string, ownerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ImageResponse>>;
+    public findByOwner(ownerService: string, ownerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ImageResponse>>>;
+    public findByOwner(ownerService: string, ownerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ImageResponse>>>;
+    public findByOwner(ownerService: string, ownerId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (ownerService === null || ownerService === undefined) {
+            throw new Error('Required parameter ownerService was null or undefined when calling findByOwner.');
+        }
+        if (ownerId === null || ownerId === undefined) {
+            throw new Error('Required parameter ownerId was null or undefined when calling findByOwner.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -351,7 +431,60 @@ export class ImageControllerService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                '*/*'
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/image/owner/${this.configuration.encodeParam({name: "ownerService", value: ownerService, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "ownerId", value: ownerId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        return this.httpClient.request<Array<ImageResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public test(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<string>;
+    public test(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public test(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public test(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -396,10 +529,10 @@ export class ImageControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<object>;
-    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<HttpResponse<object>>;
-    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<HttpEvent<object>>;
-    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext}): Observable<any> {
+    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<object>;
+    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<object>>;
+    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<object>>;
+    public updateImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, file: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (type === null || type === undefined) {
             throw new Error('Required parameter type was null or undefined when calling updateImage.');
         }
@@ -422,7 +555,7 @@ export class ImageControllerService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                '*/*'
+                'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }

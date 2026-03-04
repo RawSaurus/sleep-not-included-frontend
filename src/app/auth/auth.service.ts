@@ -17,20 +17,25 @@ export class AuthService{
   async initAuth(): Promise<void>{
     this.oauthService.configure(authConfig);
     await this.oauthService.loadDiscoveryDocumentAndTryLogin();
-
-    if(!this.oauthService.hasValidAccessToken()){
-      this.login();
-    }
-    this.userController.checkKeycloakAndCreateUser(this.userProfile['sub'])
-      .subscribe();
-
     this.oauthService.setupAutomaticSilentRefresh()
+
+    if (this.isLoggedIn) {
+      this.userController.checkKeycloakAndCreateUser(this.userProfile['sub']).subscribe();
+    }
   }
 
   login(){
     this.oauthService.initCodeFlow();
-    this.userController.checkKeycloakAndCreateUser(this.userProfile['sub'])
-      .subscribe();
+    // this.userController.checkKeycloakAndCreateUser(this.userProfile['sub'])
+    //   .subscribe();
+  }
+
+  register(): void {
+    const issuer = this.oauthService.issuer;
+    const redirectUri = encodeURIComponent(window.location.origin + '/');
+    window.location.href =
+      `${issuer}/protocol/openid-connect/registrations` +
+      `?client_id=angular&response_type=code&redirect_uri=${redirectUri}`;
   }
 
   logout(){

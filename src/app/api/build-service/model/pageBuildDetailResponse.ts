@@ -1,6 +1,6 @@
 /**
- * Tag Service API
- * Tag management operations
+ * Build Service API
+ * Build management operations
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -10,15 +10,15 @@
  * Do not edit the class manually.
  */
 import { PageableObject } from './pageableObject';
-import { TagResponse } from './tagResponse';
+import { BuildDetailResponse } from './buildDetailResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PageTagResponse { 
-    totalPages?: number;
+export interface PageBuildDetailResponse { 
     totalElements?: number;
+    totalPages?: number;
     size?: number;
-    content?: Array<TagResponse>;
+    content?: Array<BuildDetailResponse>;
     number?: number;
     sort?: SortObject;
     first?: boolean;

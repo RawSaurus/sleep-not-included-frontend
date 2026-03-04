@@ -34,14 +34,14 @@
     </p>
 
     <div class="build-footer">
-      <span class="creator">By user #{{ b.creatorId }}</span>
+      <span class="creator">By user {{ b.creatorName }}</span>
     </div>
 
-    @if (b.buildImageUrls.length > 0) {
+    @if (b.imageUrls!.length > 0) {
       <div class="build-images">
         <h3>Build Images</h3>
         <div class="build-images-grid">
-          @for (url of b.buildImageUrls; track url) {
+          @for (url of b.imageUrls; track url) {
             <img [src]="url" alt="Build image" class="build-img" />
           }
         </div>

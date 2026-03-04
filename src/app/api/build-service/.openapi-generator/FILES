@@ -7,13 +7,16 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/buildDetailResponse.ts
 model/buildRequest.ts
 model/buildResLoggedIn.ts
 model/buildResponse.ts
 model/models.ts
+model/pageBuildDetailResponse.ts
 model/pageBuildResLoggedIn.ts
 model/pageBuildResponse.ts
 model/pageableObject.ts
 model/sortObject.ts
+model/tagResponse.ts
 param.ts
 variables.ts

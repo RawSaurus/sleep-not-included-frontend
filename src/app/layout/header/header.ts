@@ -42,12 +42,13 @@ export class Header {
   }
 
   register() {
-    window.location.href =
-      'http://localhost:8443/realms/sni/protocol/openid-connect/registrations' +
-      '?client_id=angular' +
-      '&response_type=code' +
-      '&scope=' +
-      '&redirect_uri=http://localhost:4200/' + window.location.origin;
+    this.authService.register();
+    // const redirectUri = encodeURIComponent(window.location.origin + '/');
+    // window.location.href =
+    //   'http://localhost:8443/realms/sni/protocol/openid-connect/registrations' +
+    //   '?client_id=angular' +
+    //   '&response_type=code' +
+    //   '&redirect_uri=' + redirectUri;
   }
 
   test() {

@@ -1,0 +1,204 @@
+<div class="container">
+
+  <!-- ── Loading ──────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="profile-loading">
+      <div class="spinner"></div>
+      <span>Loading profile…</span>
+    </div>
+  }
+
+  <!-- ── Error ────────────────────────────────────────── -->
+  @if (error() && !isLoading()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  <!-- ── Profile Content ──────────────────────────────── -->
+  @if (!isLoading() && !error() && profileUser()) {
+    <div class="profile-layout">
+
+      <!-- ── Sidebar ──────────────────────────────────── -->
+      <aside class="profile-sidebar card">
+
+        <!-- Avatar -->
+        <div class="avatar-wrapper">
+          @if (profilePicUrl()) {
+            <img class="avatar" [src]="profilePicUrl()" [alt]="profileUser()!.username + ' avatar'" />
+          } @else {
+            <div class="avatar avatar-placeholder">
+              {{ (profileUser()!.username ?? '?')[0].toUpperCase() }}
+            </div>
+          }
+        </div>
+
+        <!-- User Info -->
+        <h2 class="profile-username">{{ profileUser()!.username }}</h2>
+        <p class="profile-email">{{ profileUser()!.email }}</p>
+
+        <div class="profile-meta">
+          <span class="profile-role" [ngClass]="'role-' + profileUser()!.role?.toLowerCase()">
+            {{ profileUser()!.role }}
+          </span>
+          <span class="profile-since">
+            Joined {{ profileUser()!.createdAt | slice:0:10 }}
+          </span>
+        </div>
+
+        <!-- Own profile actions -->
+        @if (isOwnProfile()) {
+          <button class="btn btn-outline profile-edit-btn" (click)="openEditMode()">
+            ✏️ Edit Profile
+          </button>
+        }
+
+      </aside>
+
+      <!-- ── Main Column ───────────────────────────────── -->
+      <main class="profile-main">
+
+        <!-- Tabs -->
+        <div class="profile-tabs">
+          <button
+            class="tab-btn"
+            [ngClass]="{ active: activeTab() === 'builds' }"
+            (click)="switchTab('builds')"
+          >
+            🔧 Builds
+          </button>
+          <button
+            class="tab-btn"
+            [ngClass]="{ active: activeTab() === 'liked' }"
+            (click)="switchTab('liked')"
+          >
+            ❤️ Liked
+          </button>
+        </div>
+
+        <!-- Build Grid -->
+        @if (isLoadingBuilds()) {
+          <div class="loading">Loading…</div>
+        } @else if (currentBuilds().length === 0) {
+          <p class="empty">
+            {{ activeTab() === 'builds' ? 'No builds yet.' : 'No liked builds yet.' }}
+          </p>
+        } @else {
+          <div class="grid grid-3">
+            @for (build of currentBuilds(); track build.id) {
+              <app-build-card [build]="build" />
+            }
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <button class="btn" [disabled]="currentPage() === 0" (click)="prevPage()">
+              ← Previous
+            </button>
+            <span>Page {{ currentPage() + 1 }} of {{ currentTotalPages() }}</span>
+            <button class="btn" [disabled]="currentPage() >= currentTotalPages() - 1" (click)="nextPage()">
+              Next →
+            </button>
+          </div>
+        }
+
+      </main>
+    </div>
+
+    <!-- ── Edit Modal ──────────────────────────────────── -->
+    @if (editMode()) {
+      <div class="modal-backdrop" (click)="closeEditMode()"></div>
+      <div class="modal card">
+        <div class="modal-header">
+          <h3>Edit Profile</h3>
+          <button class="modal-close" (click)="closeEditMode()" aria-label="Close">✕</button>
+        </div>
+
+        <!-- Avatar Upload -->
+        <div class="form-group avatar-upload-group">
+          <div class="avatar-preview-wrap">
+            @if (newAvatarPreview()) {
+              <img class="avatar avatar--sm" [src]="newAvatarPreview()!" alt="New avatar preview" />
+            } @else if (profilePicUrl()) {
+              <img class="avatar avatar--sm" [src]="profilePicUrl()!" alt="Current avatar" />
+            } @else {
+              <div class="avatar avatar--sm avatar-placeholder">
+                {{ (profileUser()!.username ?? '?')[0].toUpperCase() }}
+              </div>
+            }
+          </div>
+          <label class="btn btn-outline upload-btn" for="avatarInput">
+            📷 Change Picture
+          </label>
+          <input
+            id="avatarInput"
+            type="file"
+            accept="image/*"
+            class="hidden-input"
+            (change)="onAvatarSelected($event)"
+          />
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label" for="editUsername">Username</label>
+          <input
+            id="editUsername"
+            type="text"
+            class="search-bar"
+            [value]="editUsername()"
+            (input)="editUsername.set($any($event.target).value)"
+            placeholder="Username"
+            autocomplete="username"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="editEmail">Email</label>
+          <input
+            id="editEmail"
+            type="email"
+            class="search-bar"
+            [value]="editEmail()"
+            (input)="editEmail.set($any($event.target).value)"
+            placeholder="Email"
+            autocomplete="email"
+          />
+        </div>
+
+        <!-- Password (required to confirm changes) -->
+        <div class="form-group">
+          <label class="form-label" for="editPassword">
+            Password <span class="form-hint">(required to save)</span>
+          </label>
+          <input
+            id="editPassword"
+            type="password"
+            class="search-bar"
+            [value]="editPassword()"
+            (input)="editPassword.set($any($event.target).value)"
+            placeholder="Your current password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        @if (saveError()) {
+          <div class="error">{{ saveError() }}</div>
+        }
+
+        @if (saveSuccess()) {
+          <div class="success">Profile updated successfully!</div>
+        }
+
+        <div class="form-actions">
+          <button class="btn btn-outline" (click)="closeEditMode()" [disabled]="isSaving()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" (click)="saveProfile()" [disabled]="isSaving()">
+            @if (isSaving()) { Saving… } @else { Save Changes }
+          </button>
+        </div>
+      </div>
+    }
+  }
+
+</div>

@@ -80,12 +80,15 @@ export class BuildCreate implements OnInit{
     const files = Array.from((event.target as HTMLInputElement).files ?? []);
     this.buildImageFiles.set(files);
 
-    const previews: string[] = [];
-    files.forEach((file) => {
+    const previews: string[] = new Array(files.length);
+    let loaded = 0;
+
+    files.forEach((file, index) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        previews.push(e.target?.result as string);
-        if (previews.length === files.length) {
+        previews[index] = e.target?.result as string;
+        loaded++;
+        if (loaded === files.length) {
           this.buildImagePreviews.set([...previews]);
         }
       };

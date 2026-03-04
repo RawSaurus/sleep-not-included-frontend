@@ -17,9 +17,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/calculator/ranch-calculator.component/ranch-calculator.component')
         .then(m => m.RanchCalculatorComponent)
+  },
+  { path: 'profile', loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent) },
+  {
+    path: 'profile/:id',
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then(m => m.ProfileComponent)
   }
-
   // { path: 'blueprint', loadComponent: () => import('./pages/blueprint/blueprint.component').then(m => m.BlueprintComponent) },
-  // { path: 'profile', loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent) },
   // { path: 'auth', loadComponent: () => import('./pages/auth/auth.component').then(m => m.AuthComponent) },
 ];
