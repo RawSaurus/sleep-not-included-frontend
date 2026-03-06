@@ -27,8 +27,6 @@ import { BuildResponse } from '../model/buildResponse';
 // @ts-ignore
 import { PageBuildDetailResponse } from '../model/pageBuildDetailResponse';
 // @ts-ignore
-import { PageBuildResponse } from '../model/pageBuildResponse';
-// @ts-ignore
 import { TagResponse } from '../model/tagResponse';
 
 // @ts-ignore
@@ -279,6 +277,94 @@ export class BuildControllerService {
     }
 
     /**
+     * @param name 
+     * @param tagIds 
+     * @param page 
+     * @param size 
+     * @param sort 
+     * @param sortDirection 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public filterBuilds(name?: string, tagIds?: Array<number>, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<PageBuildDetailResponse>;
+    public filterBuilds(name?: string, tagIds?: Array<number>, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<PageBuildDetailResponse>>;
+    public filterBuilds(name?: string, tagIds?: Array<number>, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<PageBuildDetailResponse>>;
+    public filterBuilds(name?: string, tagIds?: Array<number>, page?: number, size?: number, sort?: string, sortDirection?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (name !== undefined && name !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>name, 'name');
+        }
+        if (tagIds) {
+            tagIds.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'tagIds');
+            })
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (size !== undefined && size !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>size, 'size');
+        }
+        if (sort !== undefined && sort !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sort, 'sort');
+        }
+        if (sortDirection !== undefined && sortDirection !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortDirection, 'sort-direction');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/build/filter`;
+        return this.httpClient.request<PageBuildDetailResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @param userId 
      * @param page 
      * @param size 
@@ -287,9 +373,9 @@ export class BuildControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<PageBuildResponse>;
-    public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<PageBuildResponse>>;
-    public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<PageBuildResponse>>;
+    public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<PageBuildDetailResponse>;
+    public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<PageBuildDetailResponse>>;
+    public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<PageBuildDetailResponse>>;
     public findAllFromUser(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling findAllFromUser.');
@@ -345,7 +431,7 @@ export class BuildControllerService {
         }
 
         let localVarPath = `/build/user/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
-        return this.httpClient.request<PageBuildResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PageBuildDetailResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -367,9 +453,9 @@ export class BuildControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<PageBuildResponse>;
-    public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<PageBuildResponse>>;
-    public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<PageBuildResponse>>;
+    public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<PageBuildDetailResponse>;
+    public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<PageBuildDetailResponse>>;
+    public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<PageBuildDetailResponse>>;
     public findAllLikedBuilds(userId: number, page?: number, size?: number, sort?: string, sortDirection?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling findAllLikedBuilds.');
@@ -425,7 +511,7 @@ export class BuildControllerService {
         }
 
         let localVarPath = `/build/liked/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
-        return this.httpClient.request<PageBuildResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PageBuildDetailResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

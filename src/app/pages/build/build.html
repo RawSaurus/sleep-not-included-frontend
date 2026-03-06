@@ -7,6 +7,90 @@
     }
   </div>
 
+  <div class="search-bar">
+
+    <!-- Name field -->
+    <div class="search-name">
+      <span class="search-icon">🔍</span>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search builds by name..."
+        [value]="searchName()"
+        (input)="onNameInput($any($event.target).value)"
+      />
+      @if (searchName().length > 0) {
+        <button class="search-clear-btn" (click)="onNameInput('')">✕</button>
+      }
+    </div>
+
+    <!-- Tag filter field -->
+    <div class="tag-filter-wrap">
+      <button
+        class="tag-filter-trigger"
+        [class.has-selection]="selectedTagIds().size > 0"
+        (click)="toggleTagDropdown()"
+      >
+        <span class="tag-filter-icon">🏷</span>
+        <span>Tags</span>
+        @if (selectedTagIds().size > 0) {
+          <span class="tag-filter-badge">{{ selectedTagIds().size }}</span>
+        }
+        <span class="tag-filter-arrow" [class.open]="tagDropdownOpen()">▾</span>
+      </button>
+
+      @if (tagDropdownOpen()) {
+        <div class="tag-dropdown">
+          @if (availableTags().length === 0) {
+            <span class="tag-dropdown-empty">No tags available</span>
+          }
+          @for (tag of availableTags(); track tag.id) {
+            <button
+              class="tag-option"
+              [class.selected]="isTagSelected(tag.id)"
+              (click)="toggleTag(tag.id)"
+            >
+              <span class="tag-option-check">{{ isTagSelected(tag.id) ? '✓' : '' }}</span>
+              {{ tag.name }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+
+  <!-- Active tag chips -->
+  @if (selectedTags().length > 0) {
+    <div class="active-filters">
+      @for (tag of selectedTags(); track tag.id) {
+        <span class="active-tag-chip">
+          {{ tag.name }}
+          <button class="chip-remove" (click)="removeTag(tag.id)">✕</button>
+        </span>
+      }
+      <button class="clear-all-btn" (click)="clearFilters()">Clear all</button>
+    </div>
+  }
+
+  <div class="sort-bar">
+    <span class="sort-label">Sort by</span>
+    <div class="sort-options">
+      @for (option of sortOptions; track option.value) {
+        <button
+          class="sort-btn"
+          [class.active]="sortBy() === option.value"
+          (click)="setSortBy(option.value)"
+        >
+          {{ option.label }}
+          @if (sortBy() === option.value) {
+            <span class="sort-arrow">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
   @if (isLoading()) {
     <div class="loading">Loading builds...</div>
   }

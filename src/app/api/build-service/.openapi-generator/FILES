@@ -12,7 +12,6 @@ model/buildRequest.ts
 model/buildResponse.ts
 model/models.ts
 model/pageBuildDetailResponse.ts
-model/pageBuildResponse.ts
 model/pageableObject.ts
 model/sortObject.ts
 model/tagResponse.ts
