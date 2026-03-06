@@ -3,6 +3,7 @@ import {BuildCard} from './build-card/build-card';
 import {BuildControllerService, BuildDetailResponse, BuildResponse} from '../../api/build-service';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
+import {AuthService} from '../../auth/auth.service';
 
 @Component({
   selector: 'app-build',
@@ -17,6 +18,7 @@ export class Build implements OnInit{
 
   private controller = inject(BuildControllerService);
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   builds = signal<BuildDetailResponse[]>([]);
   isLoading = signal(false);
@@ -26,6 +28,10 @@ export class Build implements OnInit{
   currentPage = signal(0);
   pageSize = signal(10);
   totalPages = signal(0);
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn;
+  }
 
   ngOnInit(): void {
     this.loadBuilds();
@@ -56,7 +62,7 @@ export class Build implements OnInit{
         next: (page) => {
           // console.log(page);
           this.builds.set(page.content ?? []);
-          // this.totalPages.set(page.totalPages ?? 0);
+          this.totalPages.set(page.totalPages ?? 0);
           this.isLoading.set(false);
         },
         error: (err) => {

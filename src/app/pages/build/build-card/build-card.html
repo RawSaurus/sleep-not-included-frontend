@@ -14,7 +14,19 @@
     </h3>
 
     <div class="build-meta">
-      ❤️ {{ build().likes }} Likes
+<!--      ❤️ {{ build().likes }} Likes-->
+      @if (isLoggedIn) {
+        <button
+          class="like-btn"
+          [class.liked]="isLiked()"
+          (click)="toggleLike($event)"
+        >
+          <span class="heart-icon">{{ isLiked() ? '❤️' : '🤍' }}</span>
+          {{ likesCount() }}
+        </button>
+      } @else {
+        <span>❤️ {{ build().likes ?? 0 }}</span>
+      }
     </div>
 
     <p class="build-desc">
@@ -28,7 +40,7 @@
     </div>
 
     <div class="build-footer">
-      <span class="creator">By user {{ build().creatorName }}</span>
+      <span class="creator">By {{ build().creatorName }}</span>
     </div>
 
 <!--    <div class="tags">-->

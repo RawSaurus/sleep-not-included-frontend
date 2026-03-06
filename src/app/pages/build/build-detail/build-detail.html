@@ -16,7 +16,14 @@
     <h1>{{ b.name }}</h1>
 
     <div class="build-meta">
-      ❤️ {{ b.likes ?? 0 }} Likes
+<!--      ❤️ {{ b.likes ?? 0 }} Likes-->
+      @if (isLoggedIn) {
+        <button class="like-btn" (click)="toggleLike()">
+          {{ b.isLiked ? '❤️' : '🤍' }} {{ b.likes ?? 0 }} Likes
+        </button>
+      } @else {
+        <span>❤️ {{ b.likes ?? 0 }} Likes</span>
+      }
     </div>
 
     @if (b.thumbnailUrl) {

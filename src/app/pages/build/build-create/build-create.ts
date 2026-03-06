@@ -127,9 +127,7 @@ export class BuildCreate implements OnInit{
       .pipe(
         // 2. Create the build
         switchMap((user) => {
-          const userId = user.id!;
           return this.buildController.createBuild(
-            userId,
             {
               name: this.name(),
               description: this.description(),

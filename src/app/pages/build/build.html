@@ -2,7 +2,9 @@
 
   <div class="build-header">
     <h2>Community Builds</h2>
+    @if(isLoggedIn){
     <a class="btn btn-primary" routerLink="/build/create">+ Create Build</a>
+    }
   </div>
 
   @if (isLoading()) {

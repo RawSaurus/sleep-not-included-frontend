@@ -22,5 +22,6 @@ export interface BuildDetailResponse {
     thumbnailUrl?: string;
     imageUrls?: Array<string>;
     tags?: Array<TagResponse>;
+    isLiked?: boolean;
 }
 

@@ -39,7 +39,8 @@ export class AuthService{
   }
 
   logout(){
-    this.oauthService.logOut();
+    // this.oauthService.logOut();
+    this.oauthService.revokeTokenAndLogout();
   }
 
   get accessToken(): string{
