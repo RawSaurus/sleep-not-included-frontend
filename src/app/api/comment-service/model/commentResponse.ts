@@ -14,6 +14,8 @@
 export interface CommentResponse { 
     id?: number;
     body?: string;
+    userId?: string;
+    username?: string;
     likes?: number;
     createdAt?: string;
     numOfResponses?: number;

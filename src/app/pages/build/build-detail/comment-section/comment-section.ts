@@ -104,7 +104,7 @@ export class CommentSection implements OnInit {
 
     this.isSubmitting.set(true);
     this.commentController
-      .createComment(userId, this.buildId, { body })
+      .createComment(this.buildId, { body })
       .subscribe({
         next: (comment) => {
           this.comments.update((prev) => [comment, ...prev]);

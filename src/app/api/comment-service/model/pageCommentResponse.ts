@@ -21,9 +21,9 @@ export interface PageCommentResponse {
     content?: Array<CommentResponse>;
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
+    numberOfElements?: number;
     pageable?: PageableObject;
     empty?: boolean;
 }

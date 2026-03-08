@@ -96,19 +96,15 @@ export class CommentControllerService {
     }
 
     /**
-     * @param userId 
      * @param buildId 
      * @param commentRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createComment(userId: number, buildId: number, commentRequest: CommentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<CommentResponse>;
-    public createComment(userId: number, buildId: number, commentRequest: CommentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<CommentResponse>>;
-    public createComment(userId: number, buildId: number, commentRequest: CommentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<CommentResponse>>;
-    public createComment(userId: number, buildId: number, commentRequest: CommentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling createComment.');
-        }
+    public createComment(buildId: number, commentRequest: CommentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<CommentResponse>;
+    public createComment(buildId: number, commentRequest: CommentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<CommentResponse>>;
+    public createComment(buildId: number, commentRequest: CommentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<CommentResponse>>;
+    public createComment(buildId: number, commentRequest: CommentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (buildId === null || buildId === undefined) {
             throw new Error('Required parameter buildId was null or undefined when calling createComment.');
         }
@@ -156,7 +152,7 @@ export class CommentControllerService {
             }
         }
 
-        let localVarPath = `/comment/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/${this.configuration.encodeParam({name: "buildId", value: buildId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/comment/${this.configuration.encodeParam({name: "buildId", value: buildId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<CommentResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -525,18 +521,14 @@ export class CommentControllerService {
     }
 
     /**
-     * @param userId 
      * @param commentId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public likeComment(userId: number, commentId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<object>;
-    public likeComment(userId: number, commentId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<object>>;
-    public likeComment(userId: number, commentId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<object>>;
-    public likeComment(userId: number, commentId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling likeComment.');
-        }
+    public likeComment(commentId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<object>;
+    public likeComment(commentId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<object>>;
+    public likeComment(commentId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<object>>;
+    public likeComment(commentId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (commentId === null || commentId === undefined) {
             throw new Error('Required parameter commentId was null or undefined when calling likeComment.');
         }
@@ -572,7 +564,7 @@ export class CommentControllerService {
             }
         }
 
-        let localVarPath = `/comment/like/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/${this.configuration.encodeParam({name: "commentId", value: commentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/comment/like/${this.configuration.encodeParam({name: "commentId", value: commentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<object>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -586,19 +578,15 @@ export class CommentControllerService {
     }
 
     /**
-     * @param userId 
      * @param commentId 
      * @param commentRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public respond(userId: number, commentId: number, commentRequest: CommentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<CommentResponse>;
-    public respond(userId: number, commentId: number, commentRequest: CommentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<CommentResponse>>;
-    public respond(userId: number, commentId: number, commentRequest: CommentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<CommentResponse>>;
-    public respond(userId: number, commentId: number, commentRequest: CommentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling respond.');
-        }
+    public respond(commentId: number, commentRequest: CommentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<CommentResponse>;
+    public respond(commentId: number, commentRequest: CommentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<CommentResponse>>;
+    public respond(commentId: number, commentRequest: CommentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<CommentResponse>>;
+    public respond(commentId: number, commentRequest: CommentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (commentId === null || commentId === undefined) {
             throw new Error('Required parameter commentId was null or undefined when calling respond.');
         }
@@ -646,7 +634,7 @@ export class CommentControllerService {
             }
         }
 
-        let localVarPath = `/comment/respond/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/${this.configuration.encodeParam({name: "commentId", value: commentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/comment/respond/${this.configuration.encodeParam({name: "commentId", value: commentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<CommentResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -718,20 +706,16 @@ export class CommentControllerService {
     }
 
     /**
-     * @param userId 
      * @param buildId 
      * @param id 
      * @param commentRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateComment(userId: number, buildId: number, id: number, commentRequest: CommentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<CommentResponse>;
-    public updateComment(userId: number, buildId: number, id: number, commentRequest: CommentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<CommentResponse>>;
-    public updateComment(userId: number, buildId: number, id: number, commentRequest: CommentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<CommentResponse>>;
-    public updateComment(userId: number, buildId: number, id: number, commentRequest: CommentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling updateComment.');
-        }
+    public updateComment(buildId: number, id: number, commentRequest: CommentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<CommentResponse>;
+    public updateComment(buildId: number, id: number, commentRequest: CommentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<CommentResponse>>;
+    public updateComment(buildId: number, id: number, commentRequest: CommentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<CommentResponse>>;
+    public updateComment(buildId: number, id: number, commentRequest: CommentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (buildId === null || buildId === undefined) {
             throw new Error('Required parameter buildId was null or undefined when calling updateComment.');
         }
@@ -782,7 +766,7 @@ export class CommentControllerService {
             }
         }
 
-        let localVarPath = `/comment/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/${this.configuration.encodeParam({name: "buildId", value: buildId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/comment/${this.configuration.encodeParam({name: "buildId", value: buildId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<CommentResponse>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
