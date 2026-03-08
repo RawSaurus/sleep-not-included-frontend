@@ -45,6 +45,10 @@
   cursor: not-allowed;
 }
 
+.reply-textarea {
+  margin-top: 10px;
+}
+
 .comment-input-actions {
   display: flex;
   justify-content: flex-end;
@@ -84,19 +88,16 @@
   gap: 20px;
   padding-right: 4px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.12) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
 }
 
-.comment-list::-webkit-scrollbar {
-  width: 4px;
-}
-
+.comment-list::-webkit-scrollbar { width: 4px; }
 .comment-list::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 2px;
 }
 
-/* ── Individual comment ──────────────────────────── */
+/* ── Comment item ────────────────────────────────── */
 .comment-item {
   display: flex;
   gap: 14px;
@@ -124,8 +125,15 @@
 .comment-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.comment-username {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #f1f1f1);
 }
 
 .comment-date {
@@ -146,35 +154,151 @@
   word-break: break-word;
 }
 
-/* ── Responses button ────────────────────────────── */
-.btn-responses {
+/* ── Action row ──────────────────────────────────── */
+.comment-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* Pill buttons (responses, reply, edit, delete) */
+.btn-pill {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  padding: 4px 12px;
+  padding: 3px 11px;
   font-size: 12px;
   color: var(--text-secondary, #aaa);
   cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-.btn-responses:hover {
+.btn-pill:hover {
   color: var(--text-primary, #f1f1f1);
   border-color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.04);
 }
 
-.btn-responses.expanded {
+.btn-pill.active {
   color: var(--accent, #e05c7a);
   border-color: rgba(224, 92, 122, 0.4);
 }
 
-.responses-arrow {
+.btn-pill.btn-reply:hover,
+.btn-pill.btn-reply.active {
+  color: #60b4ff;
+  border-color: rgba(96, 180, 255, 0.4);
+  background: rgba(96, 180, 255, 0.05);
+}
+
+.btn-pill.btn-edit:hover {
+  color: #f0c060;
+  border-color: rgba(240, 192, 96, 0.4);
+  background: rgba(240, 192, 96, 0.05);
+}
+
+.btn-pill.btn-delete:hover {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.05);
+}
+
+.pill-arrow {
   font-size: 10px;
-  transition: transform 0.2s ease;
+}
+
+/* ── Edit area ───────────────────────────────────── */
+.edit-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+  animation: fadeIn 0.15s ease;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-action {
+  padding: 5px 14px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background: none;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary, #aaa);
+}
+
+.btn-cancel:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--text-primary, #f1f1f1);
+}
+
+.btn-save {
+  background: var(--accent, #e05c7a);
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-save:hover:not(:disabled) {
+  background: #c94d6b;
+}
+
+/* ── Delete confirm ──────────────────────────────── */
+.delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  margin-bottom: 8px;
+  animation: fadeIn 0.15s ease;
+}
+
+.delete-confirm-text {
+  font-size: 13px;
+  color: #ff8f8f;
+  flex: 1;
+}
+
+.btn-delete-confirm {
+  background: #e05252;
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-delete-confirm:hover {
+  background: #c94444;
+}
+
+/* ── Reply input area ────────────────────────────── */
+.reply-input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  animation: fadeIn 0.15s ease;
 }
 
 /* ── Responses area ──────────────────────────────── */
@@ -186,11 +310,6 @@
   flex-direction: column;
   gap: 16px;
   animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 
 .response-item {
@@ -249,4 +368,9 @@
 @keyframes bounce {
   0%, 100% { transform: translateY(0); opacity: 0.5; }
   50%       { transform: translateY(-6px); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

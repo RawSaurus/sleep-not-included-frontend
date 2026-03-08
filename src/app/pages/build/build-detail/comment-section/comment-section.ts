@@ -37,11 +37,19 @@ export class CommentSection implements OnInit {
 
   currentUserId = signal<number | null>(null);
 
-  // Track which comment's responses are expanded
   expandedResponses = signal<Set<number>>(new Set());
-  // Map commentId -> responses list
   responses = signal<Map<number, CommentResponse[]>>(new Map());
   loadingResponses = signal<Set<number>>(new Set());
+
+  activeReplyId = signal<number | null>(null);
+  replyDrafts = signal<Map<number, string>>(new Map());
+  replySubmitting = signal<Set<number>>(new Set());
+
+  editingCommentId = signal<number | null>(null);
+  editBody = signal('');
+  editSubmitting = signal(false);
+
+  deletingCommentId = signal<number | null>(null);
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
@@ -62,6 +70,12 @@ export class CommentSection implements OnInit {
       next: (user) => this.currentUserId.set(user.id ?? null),
       error: () => {},
     });
+  }
+
+  isOwner(comment: CommentResponse): boolean {
+    const uid = this.currentUserId();
+    if (uid == null) return false;
+    return comment.userId === uid.toString();
   }
 
   loadComments(): void {
@@ -153,6 +167,12 @@ export class CommentSection implements OnInit {
     }
   }
 
+  private setLoadingResponse(id: number, loading: boolean): void {
+    const set = new Set(this.loadingResponses());
+    loading ? set.add(id) : set.delete(id);
+    this.loadingResponses.set(set);
+  }
+
   isExpanded(id: number): boolean {
     return this.expandedResponses().has(id);
   }
@@ -163,6 +183,122 @@ export class CommentSection implements OnInit {
 
   isLoadingResponse(id: number): boolean {
     return this.loadingResponses().has(id);
+  }
+
+  toggleReplyBox(commentId: number): void {
+    this.activeReplyId.set(this.activeReplyId() === commentId ? null : commentId);
+    if (!this.replyDrafts().has(commentId)) {
+      const map = new Map(this.replyDrafts());
+      map.set(commentId, '');
+      this.replyDrafts.set(map);
+    }
+  }
+
+  getReplyDraft(commentId: number): string {
+    return this.replyDrafts().get(commentId) ?? '';
+  }
+
+  setReplyDraft(commentId: number, value: string): void {
+    const map = new Map(this.replyDrafts());
+    map.set(commentId, value);
+    this.replyDrafts.set(map);
+  }
+
+  isReplySubmitting(commentId: number): boolean {
+    return this.replySubmitting().has(commentId);
+  }
+
+  submitReply(parentComment: CommentResponse): void {
+    const id = parentComment.id!;
+    const body = this.getReplyDraft(id).trim();
+    if (!body) return;
+
+    const submitting = new Set(this.replySubmitting());
+    submitting.add(id);
+    this.replySubmitting.set(submitting);
+
+    this.commentController.respond(id, { body }).subscribe({
+      next: (response) => {
+        // Append to responses list (lazy-create if needed)
+        const map = new Map(this.responses());
+        map.set(id, [...(map.get(id) ?? []), response]);
+        this.responses.set(map);
+
+        // Expand responses section
+        const expanded = new Set(this.expandedResponses());
+        expanded.add(id);
+        this.expandedResponses.set(expanded);
+
+        // Increment counter on parent comment
+        this.comments.update((prev) =>
+          prev.map((c) =>
+            c.id === id ? { ...c, numOfResponses: (c.numOfResponses ?? 0) + 1 } : c
+          )
+        );
+
+        // Clean up
+        this.setReplyDraft(id, '');
+        this.activeReplyId.set(null);
+        const done = new Set(this.replySubmitting());
+        done.delete(id);
+        this.replySubmitting.set(done);
+      },
+      error: () => {
+        const done = new Set(this.replySubmitting());
+        done.delete(id);
+        this.replySubmitting.set(done);
+      },
+    });
+  }
+
+  // ── Edit ──────────────────────────────────────────────
+
+  startEdit(comment: CommentResponse): void {
+    this.editingCommentId.set(comment.id!);
+    this.editBody.set(comment.body ?? '');
+  }
+
+  cancelEdit(): void {
+    this.editingCommentId.set(null);
+    this.editBody.set('');
+  }
+
+  submitEdit(comment: CommentResponse): void {
+    const body = this.editBody().trim();
+    if (!body || this.editSubmitting()) return;
+
+    this.editSubmitting.set(true);
+    this.commentController.updateComment(this.buildId, comment.id!, { body }).subscribe({
+      next: (updated) => {
+        this.comments.update((prev) =>
+          prev.map((c) => (c.id === updated.id ? { ...c, body: updated.body } : c))
+        );
+        this.editingCommentId.set(null);
+        this.editBody.set('');
+        this.editSubmitting.set(false);
+      },
+      error: () => this.editSubmitting.set(false),
+    });
+  }
+
+  // ── Delete ────────────────────────────────────────────
+
+  confirmDelete(commentId: number): void {
+    this.deletingCommentId.set(commentId);
+  }
+
+  cancelDelete(): void {
+    this.deletingCommentId.set(null);
+  }
+
+  submitDelete(commentId: number): void {
+    this.commentController.deleteComment(commentId).subscribe({
+      next: () => {
+        this.comments.update((prev) => prev.filter((c) => c.id !== commentId));
+        this.deletingCommentId.set(null);
+      },
+      error: () => this.deletingCommentId.set(null),
+    });
   }
 
   formatDate(dateStr?: string): string {

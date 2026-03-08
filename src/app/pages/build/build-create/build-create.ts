@@ -202,7 +202,7 @@ export class BuildCreate implements OnInit{
       .subscribe({
         error: (err) => {
           console.error(err);
-          this.error.set('Something went wrong. Please try again.');
+          this.error.set(err.error.businessErrorDescription || 'Failed to create build. Please try again.');
           this.isSubmitting.set(false);
         },
       });
