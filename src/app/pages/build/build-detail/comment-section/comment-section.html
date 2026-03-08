@@ -1,0 +1,95 @@
+<section class="comment-section">
+<h3 class="comment-section-title">Comments</h3>
+
+@if (isLoggedIn) {
+  <div class="comment-input-area">
+      <textarea
+        class="comment-textarea"
+        placeholder="Add a comment..."
+        rows="3"
+        [value]="newCommentBody()"
+        (input)="newCommentBody.set($any($event.target).value)"
+        [disabled]="isSubmitting()"
+      ></textarea>
+    <div class="comment-input-actions">
+      <button
+        class="btn-submit-comment"
+        (click)="submitComment()"
+        [disabled]="!newCommentBody().trim() || isSubmitting()"
+      >
+        {{ isSubmitting() ? 'Posting...' : 'Post' }}
+      </button>
+    </div>
+  </div>
+}
+
+<div class="comment-list" (scroll)="onScroll($event)">
+  @for (comment of comments(); track comment.id) {
+    <div class="comment-item">
+      <div class="comment-avatar">
+        {{ comment.body?.charAt(0)?.toUpperCase() ?? '?' }}
+      </div>
+      <div class="comment-content">
+        <div class="comment-meta">
+<!--          <span class="comment-date">{{ comment. }}</span>-->
+          <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+          <span class="comment-likes">❤️ {{ comment.likes ?? 0 }}</span>
+        </div>
+        <p class="comment-body">{{ comment.body }}</p>
+
+        @if(comment.numOfResponses! > 0){
+        <button
+          class="btn-responses"
+          (click)="toggleResponses(comment)"
+          [class.expanded]="isExpanded(comment.id!)"
+        >
+          <span class="responses-arrow">{{ isExpanded(comment.id!) ? '▾' : '▸' }}</span>
+          {{ comment.numOfResponses ?? 0 }} Responses
+        </button>
+        }
+        @if (isExpanded(comment.id!)) {
+          <div class="responses-area">
+            @if (isLoadingResponse(comment.id!)) {
+              <p class="loading-responses">Loading responses...</p>
+            } @else {
+              @for (response of getResponses(comment.id!); track response.id) {
+                <div class="response-item">
+                  <div class="response-avatar">
+                    {{ response.body?.charAt(0)?.toUpperCase() ?? '?' }}
+                  </div>
+                  <div class="response-content">
+                    <div class="comment-meta">
+                      <span class="comment-date">{{ formatDate(response.createdAt) }}</span>
+                      <span class="comment-likes">❤️ {{ response.likes ?? 0 }}</span>
+                    </div>
+                    <p class="comment-body">{{ response.body }}</p>
+                  </div>
+                </div>
+              }
+              @if (getResponses(comment.id!).length === 0) {
+                <p class="no-responses">No responses yet.</p>
+              }
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (isLoadingComments()) {
+    <div class="comments-loading">
+      <span class="loading-dot"></span>
+      <span class="loading-dot"></span>
+      <span class="loading-dot"></span>
+    </div>
+  }
+
+  @if (!hasMoreComments() && comments().length > 0) {
+    <p class="no-more-comments">You've reached the end of comments.</p>
+  }
+
+  @if (!isLoadingComments() && comments().length === 0) {
+    <p class="no-comments">No comments yet. Be the first to comment!</p>
+  }
+</div>
+</section>

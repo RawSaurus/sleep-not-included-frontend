@@ -141,7 +141,7 @@ export class Build implements OnInit{
 
     if (!name && tagIds.length === 0) {
       this.controller
-        .findAllTest(this.currentPage(), this.pageSize(), this.sortBy(), this.sortDirection())
+        .findAll(this.currentPage(), this.pageSize(), this.sortBy(), this.sortDirection())
         .subscribe({
           next: (page) => {
             this.builds.set(page.content ?? []);

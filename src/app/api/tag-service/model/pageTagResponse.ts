@@ -15,8 +15,8 @@ import { SortObject } from './sortObject';
 
 
 export interface PageTagResponse { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<TagResponse>;
     number?: number;

@@ -9,6 +9,5 @@ git_push.sh
 index.ts
 model/imageResponse.ts
 model/models.ts
-model/multiValueMapStringObject.ts
 param.ts
 variables.ts

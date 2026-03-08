@@ -20,8 +20,6 @@ import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
 import { ImageResponse } from '../model/imageResponse';
-// @ts-ignore
-import { MultiValueMapStringObject } from '../model/multiValueMapStringObject';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -159,120 +157,6 @@ export class ImageControllerService {
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param name 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public downloadBuildImages(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<MultiValueMapStringObject>;
-    public downloadBuildImages(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<HttpResponse<MultiValueMapStringObject>>;
-    public downloadBuildImages(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<HttpEvent<MultiValueMapStringObject>>;
-    public downloadBuildImages(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'multipart/mixed', context?: HttpContext}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling downloadBuildImages.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'multipart/mixed'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/image/download/build-images/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<MultiValueMapStringObject>('get', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param type 
-     * @param name 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public downloadImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<Blob>;
-    public downloadImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<HttpResponse<Blob>>;
-    public downloadImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<HttpEvent<Blob>>;
-    public downloadImage(type: 'PROFILE_PIC' | 'BUILD_THUMBNAIL' | 'BUILD_IMAGE' | 'RES_IMAGE', name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/jpeg', context?: HttpContext}): Observable<any> {
-        if (type === null || type === undefined) {
-            throw new Error('Required parameter type was null or undefined when calling downloadImage.');
-        }
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling downloadImage.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (type !== undefined && type !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>type, 'type');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'image/jpeg'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let localVarPath = `/image/download/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,

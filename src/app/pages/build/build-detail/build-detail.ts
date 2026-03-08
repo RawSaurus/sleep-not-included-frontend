@@ -2,10 +2,13 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BuildControllerService, BuildDetailResponse, BuildResponse} from '../../../api/build-service';
 import {AuthService} from '../../../auth/auth.service';
+import {CommentSection} from './comment-section/comment-section';
 
 @Component({
   selector: 'app-build-detail',
-  imports: [],
+  imports: [
+    CommentSection
+  ],
   templateUrl: './build-detail.html',
   styleUrl: './build-detail.css',
 })
