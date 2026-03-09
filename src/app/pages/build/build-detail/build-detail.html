@@ -41,7 +41,18 @@
     </p>
 
     <div class="build-footer">
-      <span class="creator">By {{ b.creatorName }}</span>
+        <div>
+          <p>Made By: </p>
+        <a
+          class="user-username"
+          [routerLink]="['/profile']"
+          [queryParams]="{ username: b.creatorName }"
+          (click)="$event.stopPropagation()"
+        >
+          {{ b.creatorName }}
+        </a>
+      </div>
+<!--      <span class="creator">By {{ b.creatorName }}</span>-->
     </div>
 
     @if (b.imageUrls!.length > 0) {
