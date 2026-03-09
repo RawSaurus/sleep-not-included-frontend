@@ -1,53 +1,107 @@
-<div class="card build-card">
+<div class="build-card card">
 
-  @if (build().thumbnailUrl) {
-    <img [src]="build().thumbnailUrl" alt="Build thumbnail" />
-  } @else {
-    <div class="no-thumbnail">No image</div>
-  }
+  <!-- ── 1. USER HEADER ──────────────────────────────── -->
+  <div class="card-user-header">
+    <div class="user-avatar-wrap">
+      <!-- Placeholder avatar showing first letter of creator name -->
+      <div class="user-avatar">
+        {{ (build().creatorName ?? '?')[0].toUpperCase() }}
+      </div>
+    </div>
+    <a
+      class="user-username"
+      [routerLink]="['/profile']"
+      [queryParams]="{ username: build().creatorName }"
+      (click)="$event.stopPropagation()"
+    >
+      {{ build().creatorName }}
+    </a>
+  </div>
 
-  <div class="build-content">
-    <h3 class="build-title">
-      <a [routerLink]="['/build', build().id]">
-        {{ build().name }}
-      </a>
+  <!-- ── 2. IMAGE CAROUSEL ────────────────────────────── -->
+  <div class="card-image-wrap">
+
+    @if (allImages().length > 0) {
+      <!-- Current image -->
+      <img
+        class="card-image"
+        [src]="allImages()[currentImageIndex()]"
+        [alt]="build().name"
+      />
+
+      <!-- Left/right arrows (only shown when >1 image) -->
+      @if (allImages().length > 1) {
+        <button class="carousel-btn carousel-btn--prev" (click)="prevImage($event)" aria-label="Previous image">
+          &#8249;
+        </button>
+        <button class="carousel-btn carousel-btn--next" (click)="nextImage($event)" aria-label="Next image">
+          &#8250;
+        </button>
+
+        <!-- Dot indicators -->
+        <div class="carousel-dots">
+          @for (img of allImages(); track $index) {
+            <span
+              class="carousel-dot"
+              [class.active]="$index === currentImageIndex()"
+              (click)="goToImage($event, $index)"
+            ></span>
+          }
+        </div>
+      }
+
+    } @else {
+      <div class="card-image-placeholder">
+        <span>No Image</span>
+      </div>
+    }
+
+  </div>
+
+  <!-- ── 3. BOTTOM CONTENT ────────────────────────────── -->
+  <div class="card-body">
+
+    <!-- Build name (clickable → detail page) -->
+    <h3 class="card-title">
+      <a [routerLink]="['/build', build().id]">{{ build().name }}</a>
     </h3>
 
-    <div class="build-meta">
-<!--      ❤️ {{ build().likes }} Likes-->
+    <!-- Short description -->
+    <p class="card-desc" [class.card-desc--empty]="!build().shortDescription">
+      {{ build().shortDescription || 'No description' }}
+    </p>
+
+    <!-- Tags (max 5) -->
+    <div class="card-tags">
+      @if (displayTags().length > 0) {
+        @for (tag of displayTags(); track tag.id) {
+          <span class="tag">{{ tag.name }}</span>
+        }
+      } @else {
+        <span class="tag tag--empty">No tags</span>
+      }
+    </div>
+
+    <!-- Like button -->
+    <div class="card-footer">
       @if (isLoggedIn) {
         <button
           class="like-btn"
           [class.liked]="isLiked()"
           (click)="toggleLike($event)"
+          [attr.aria-label]="isLiked() ? 'Unlike' : 'Like'"
         >
           <span class="heart-icon">{{ isLiked() ? '❤️' : '🤍' }}</span>
-          {{ likesCount() }}
+          <span>{{ likesCount() }}</span>
         </button>
       } @else {
-        <span>❤️ {{ build().likes ?? 0 }}</span>
+        <span class="like-display">
+          <span>❤️</span>
+          <span>{{ build().likes ?? 0 }}</span>
+        </span>
       }
     </div>
 
-    <p class="build-desc">
-      {{ build().description }}
-    </p>
-
-    <div class="tags">
-      @for (tag of build().tags; track tag.id) {
-        <span class="tag">{{ tag.name }}</span>
-      }
-    </div>
-
-    <div class="build-footer">
-      <span class="creator">By {{ build().creatorName }}</span>
-    </div>
-
-<!--    <div class="tags">-->
-<!--      @for (tag of build().tags; track tag) {-->
-<!--        <span class="tag">{{ tag }}</span>-->
-<!--      }-->
-<!--    </div>-->
   </div>
 
 </div>

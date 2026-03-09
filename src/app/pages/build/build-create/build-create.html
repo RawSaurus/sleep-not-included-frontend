@@ -23,6 +23,18 @@
       />
     </div>
 
+    <!-- Short Description -->
+    <div class="field">
+      <label class="field-label">Short Description</label>
+      <textarea
+        class="field-input short-field-textarea"
+        placeholder="Provide a brief overview of your build. This will be shown in the build list and should highlight the main features of your build."
+        rows="3"
+        [value]="shortDescription()"
+        (input)="shortDescription.set($any($event.target).value)"
+      ></textarea>
+    </div>
+
     <!-- Description -->
     <div class="field">
       <label class="field-label">Description</label>

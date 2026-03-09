@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {NgClass, SlicePipe} from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { UserControllerService, UserResponse, UserRequest } from '../../api/user-service';
-import { BuildControllerService, BuildResponse } from '../../api/build-service';
+import {BuildControllerService, BuildDetailResponse, BuildResponse} from '../../api/build-service';
 import { ImageControllerService } from '../../api/image-service';
 import { forkJoin } from 'rxjs';
 import { BuildCard } from '../build/build-card/build-card';
@@ -33,8 +33,8 @@ export class ProfileComponent implements OnInit{
   profilePicUrl = signal<string | null>(null);
 
   // ── Builds ──────────────────────────────────────────
-  userBuilds  = signal<BuildResponse[]>([]);
-  likedBuilds = signal<BuildResponse[]>([]);
+  userBuilds  = signal<BuildDetailResponse[]>([]);
+  likedBuilds = signal<BuildDetailResponse[]>([]);
   activeTab   = signal<ProfileTab>('builds');
 
   // Pagination

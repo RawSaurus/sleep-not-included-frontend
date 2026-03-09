@@ -14,7 +14,7 @@
 export interface BuildResponse { 
     id?: number;
     name?: string;
-    description?: string;
+    shortDescription?: string;
     creatorId?: number;
     likes?: number;
 }

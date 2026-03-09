@@ -15,6 +15,7 @@ import { TagResponse } from './tagResponse';
 export interface BuildDetailResponse { 
     id?: number;
     name?: string;
+    shortDescription?: string;
     description?: string;
     likes?: number;
     createdAt?: string;

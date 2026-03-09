@@ -25,6 +25,7 @@ export class BuildCreate implements OnInit{
 
   // Form fields
   name = signal('');
+  shortDescription = signal('');
   description = signal('');
 
   // Tags
@@ -130,6 +131,7 @@ export class BuildCreate implements OnInit{
           return this.buildController.createBuild(
             {
               name: this.name(),
+              shortDescription: this.shortDescription(),
               description: this.description(),
               tagId: Array.from(this.selectedTagIds()),
             }

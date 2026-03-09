@@ -13,7 +13,8 @@
 
 export interface BuildRequest { 
     name: string;
-    description: string;
+    shortDescription: string;
+    description?: string;
     tagId?: Array<number>;
 }
 
