@@ -28,6 +28,8 @@ export class BuildDetail implements OnInit{
   isLoading = signal(true);
   error = signal<string | null>(null);
 
+  lightboxUrl = signal<string | null>(null);
+
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
   }
@@ -46,6 +48,16 @@ export class BuildDetail implements OnInit{
           this.isLoading.set(false);
         }
       });
+  }
+
+  openLightbox(url: string): void {
+    this.lightboxUrl.set(url);
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeLightbox(): void {
+    this.lightboxUrl.set(null);
+    document.body.style.overflow = '';
   }
 
   toggleLike(): void {

@@ -8,6 +8,10 @@ import {AuthService} from '../../../auth/auth.service';
 import {switchMap, forkJoin, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+const MAX_IMAGE_COUNT = 20;
+
 @Component({
   selector: 'app-build-create',
   imports: [],
@@ -38,9 +42,15 @@ export class BuildCreate implements OnInit{
   buildImageFiles = signal<File[]>([]);
   buildImagePreviews = signal<string[]>([]);
 
+  // Drag-&-Drop
+  isDraggingThumbnail = signal(false);
+  isDraggingImages = signal(false);
+
   // UI state
   isSubmitting = signal(false);
   error = signal<string | null>(null);
+
+  readonly maxImageCount = MAX_IMAGE_COUNT;
 
   ngOnInit(): void {
     this.tagController
@@ -65,32 +75,117 @@ export class BuildCreate implements OnInit{
     return tagId != null && this.selectedTagIds().has(tagId);
   }
 
+  private validateFile(file: File): string | null {
+    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+      return `"${file.name}" is not a supported format. Only JPEG and PNG are allowed.`;
+    }
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      return `"${file.name}" exceeds the 5 MB size limit (${(file.size / 1024 / 1024).toFixed(1)} MB).`;
+    }
+    return null;
+  }
+
+  private validateFiles(files: File[]): string | null {
+    for (const file of files) {
+      const err = this.validateFile(file);
+      if (err) return err;
+    }
+    return null;
+  }
+
   onThumbnailSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0] ?? null;
-    this.thumbnailFile.set(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => this.thumbnailPreview.set(e.target?.result as string);
-      reader.readAsDataURL(file);
-    } else {
+    console.log("File size: " + file?.size);
+    this.setThumbnail(file);
+  }
+
+  onThumbnailDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDraggingThumbnail.set(true);
+  }
+
+  onThumbnailDragLeave(): void {
+    this.isDraggingThumbnail.set(false);
+  }
+
+  onThumbnailDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDraggingThumbnail.set(false);
+    const file = event.dataTransfer?.files?.[0] ?? null;
+    if (!file) return;
+    this.setThumbnail(file);
+  }
+
+  private setThumbnail(file: File | null): void {
+    if (!file) {
+      this.thumbnailFile.set(null);
       this.thumbnailPreview.set(null);
+      return;
     }
+    const err = this.validateFile(file);
+    if (err) { this.error.set(err); return; }
+    this.error.set(null);
+    this.thumbnailFile.set(file);
+    const reader = new FileReader();
+    reader.onload = (e) => this.thumbnailPreview.set(e.target?.result as string);
+    reader.readAsDataURL(file);
   }
 
   onBuildImagesSelected(event: Event): void {
-    const files = Array.from((event.target as HTMLInputElement).files ?? []);
-    this.buildImageFiles.set(files);
+    const incoming = Array.from((event.target as HTMLInputElement).files ?? []);
+    for(let i = 0; i<incoming.length; i++){
+      console.log("build image size: " + incoming[i].size);
+    }
+    this.addBuildImages(incoming);
+    // Reset so the same file can be re-selected after removal
+    (event.target as HTMLInputElement).value = '';
+  }
 
-    const previews: string[] = new Array(files.length);
+  onImagesDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDraggingImages.set(true);
+  }
+
+  onImagesDragLeave(): void {
+    this.isDraggingImages.set(false);
+  }
+
+  onImagesDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDraggingImages.set(false);
+    const incoming = Array.from(event.dataTransfer?.files ?? []);
+    this.addBuildImages(incoming);
+  }
+
+  private addBuildImages(incoming: File[]): void {
+    this.error.set(null);
+
+    const validationError = this.validateFiles(incoming);
+    if (validationError) { this.error.set(validationError); return; }
+
+    const existing = this.buildImageFiles();
+    const combined = [...existing, ...incoming];
+
+    if (combined.length > MAX_IMAGE_COUNT) {
+      this.error.set(
+        `You can upload a maximum of ${MAX_IMAGE_COUNT} images. ` +
+        `You have ${existing.length} and tried to add ${incoming.length} more.`
+      );
+      return;
+    }
+
+    // Load previews only for newly added files, then append to existing previews
+    const newPreviews: string[] = new Array(incoming.length);
     let loaded = 0;
 
-    files.forEach((file, index) => {
+    incoming.forEach((file, index) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        previews[index] = e.target?.result as string;
+        newPreviews[index] = e.target?.result as string;
         loaded++;
-        if (loaded === files.length) {
-          this.buildImagePreviews.set([...previews]);
+        if (loaded === incoming.length) {
+          this.buildImageFiles.set(combined);
+          this.buildImagePreviews.set([...this.buildImagePreviews(), ...newPreviews]);
         }
       };
       reader.readAsDataURL(file);
@@ -113,6 +208,11 @@ export class BuildCreate implements OnInit{
   submit(): void {
     if (!this.name().trim()) {
       this.error.set('Build name is required.');
+      return;
+    }
+
+    if (this.buildImageFiles().length === 0) {
+      this.error.set('At least one build image is required.');
       return;
     }
 

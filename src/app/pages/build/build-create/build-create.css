@@ -30,6 +30,9 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .required {
@@ -108,7 +111,7 @@
   padding: 28px;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
   overflow: hidden;
 }
 
@@ -122,6 +125,24 @@
   border-color: var(--primary);
 }
 
+/* Drag-over state */
+.upload-area.drag-over {
+  border-color: var(--primary);
+  background: rgba(61, 180, 242, 0.08);
+  border-style: solid;
+}
+
+.upload-area.drag-over .upload-placeholder {
+  color: var(--primary);
+}
+
+/* Disabled state (max images reached) */
+.upload-area.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .upload-placeholder {
   display: flex;
   flex-direction: column;
@@ -130,6 +151,7 @@
   color: var(--text-secondary);
   font-size: 14px;
   pointer-events: none;
+  transition: color 0.2s;
 }
 
 .upload-icon {
@@ -149,6 +171,24 @@
   cursor: pointer;
   width: 100%;
   height: 100%;
+}
+
+/* ── Image count badge ───────────────────────────────── */
+.image-count-badge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+  transition: background 0.2s, color 0.2s;
+}
+
+.image-count-badge.at-limit {
+  background: rgba(224, 92, 122, 0.15);
+  color: #e05c7a;
 }
 
 /* ── Thumbnail Preview ───────────────────────────────── */
@@ -225,6 +265,32 @@
 .form-actions .btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+/* ── Drag-over state ─────────────────────────────────── */
+.upload-area.drag-over {
+  border-color: var(--primary);
+  background: rgba(61, 180, 242, 0.07);
+}
+
+.upload-area.drag-over .upload-placeholder {
+  color: var(--primary);
+}
+
+/* ── Image count badge ───────────────────────────────── */
+.image-count-badge {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-700);
+  border-radius: 10px;
+  padding: 2px 8px;
+  letter-spacing: 0;
+  text-transform: none;
+  vertical-align: middle;
+  opacity: 0.75;
 }
 
 /* ── Error ───────────────────────────────────────────── */

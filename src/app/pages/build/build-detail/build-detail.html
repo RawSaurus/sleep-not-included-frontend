@@ -60,13 +60,29 @@
         <h3>Build Images</h3>
         <div class="build-images-grid">
           @for (url of b.imageUrls; track url) {
-            <img [src]="url" alt="Build image" class="build-img" />
-          }
+            <img
+              [src]="url"
+              alt="Build image"
+              class="build-img"
+              (click)="openLightbox(url)"
+            />          }
         </div>
       </div>
     }
 
     <app-comment-section [buildId]="b.id!" />
 
+  </div>
+}
+<!-- Lightbox overlay -->
+@if (lightboxUrl()) {
+  <div class="lightbox-overlay" (click)="closeLightbox()">
+    <button class="lightbox-close" (click)="closeLightbox()" aria-label="Close image">&times;</button>
+    <img
+      class="lightbox-img"
+      [src]="lightboxUrl()"
+      alt="Expanded image"
+      (click)="$event.stopPropagation()"
+    />
   </div>
 }

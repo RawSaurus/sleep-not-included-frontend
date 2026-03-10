@@ -43,27 +43,6 @@ export class Header {
 
   register() {
     this.authService.register();
-    // const redirectUri = encodeURIComponent(window.location.origin + '/');
-    // window.location.href =
-    //   'http://localhost:8443/realms/sni/protocol/openid-connect/registrations' +
-    //   '?client_id=angular' +
-    //   '&response_type=code' +
-    //   '&redirect_uri=' + redirectUri;
-  }
-
-  test() {
-    this.getCurrentUser().subscribe({
-      next: (response) => {
-        console.log(response);
-      }
-    });
-  }
-
-  getCurrentUser(){
-    // let rq = new HttpRequest('GET', 'http://localhost:8080/user/1');
-    // rq.headers.set('Authorization', 'Bearer ' + this.authService.accessToken);
-    // return this.http.request<UserResponse>(rq);
-    return this.http.get<UserResponse>('http://localhost:8080/test');
   }
 
   @HostListener('document:click', ['$event'])

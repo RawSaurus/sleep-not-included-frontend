@@ -152,6 +152,66 @@
                       </div>
                       <p class="comment-body">{{ response.body }}</p>
                     </div>
+                    <!-- Action row -->
+                    @if (editingCommentId() !== response.id && deletingCommentId() !== response.id) {
+                      <div class="comment-actions">
+                        @if (response.numOfResponses! > 0) {
+                          <button
+                            class="btn-pill"
+                            [class.active]="isExpanded(response.id!)"
+                            (click)="toggleResponses(response)"
+                          >
+                            <span class="pill-arrow">{{ isExpanded(response.id!) ? '▾' : '▸' }}</span>
+                            {{ response.numOfResponses ?? 0 }} Responses
+                          </button>
+                        }
+
+                        @if (isLoggedIn) {
+                          <button
+                            class="btn-pill btn-reply"
+                            [class.active]="activeReplyId() === response.id"
+                            (click)="toggleReplyBox(response.id!)"
+                          >
+                            ↩ Reply
+                          </button>
+                        }
+
+                        @if (isOwner(response)) {
+                          <button class="btn-pill btn-edit" (click)="startEdit(response)">
+                            Edit
+                          </button>
+                          <button class="btn-pill btn-delete" (click)="confirmDelete(response.id!)">
+                            Delete
+                          </button>
+                        }
+                      </div>
+                    }
+
+                    <!-- Reply input box -->
+                    @if (activeReplyId() === response.id) {
+                      <div class="reply-input-area">
+              <textarea
+                class="comment-textarea reply-textarea"
+                rows="2"
+                placeholder="Write a reply..."
+                [value]="getReplyDraft(response.id!)"
+                (input)="setReplyDraft(response.id!, $any($event.target).value)"
+                [disabled]="isReplySubmitting(response.id!)"
+              ></textarea>
+                        <div class="edit-actions">
+                          <button class="btn-action btn-cancel" (click)="toggleReplyBox(response.id!)">
+                            Cancel
+                          </button>
+                          <button
+                            class="btn-action btn-save"
+                            (click)="submitReply(response)"
+                            [disabled]="!getReplyDraft(response.id!).trim() || isReplySubmitting(response.id!)"
+                          >
+                            {{ isReplySubmitting(response.id!) ? 'Posting...' : 'Reply' }}
+                          </button>
+                        </div>
+                      </div>
+                    }
                   </div>
                 }
                 @if (getResponses(comment.id!).length === 0) {

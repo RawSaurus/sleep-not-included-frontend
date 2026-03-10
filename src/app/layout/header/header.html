@@ -11,12 +11,14 @@
       <button
         class="dropdown-trigger"
         (click)="toggleCalculator()"
+        (mouseenter)="toggleCalculator()"
+        (mousedown)="toggleCalculator()"
         type="button"
         aria-haspopup="true"
         aria-expanded="{{ calculatorOpen() }}"
       >
-        Calculator
-        <span class="arrow" [ngClass]="{ rotate: calculatorOpen() }">▼</span>
+        CALCULATOR
+<!--        <span class="arrow" [ngClass]="{ rotate: calculatorOpen() }">▼</span>-->
       </button>
 
       @if(calculatorOpen()){
@@ -43,7 +45,6 @@
     <a routerLink="/profile" routerLinkActive="active">Profile</a>
   </nav>
 
-  <button class="btn" (click)="test()">Test</button>
   <div>
     @if (!authService.isLoggedIn){
       <button class="btn" (click)="authService.login()">Login</button>

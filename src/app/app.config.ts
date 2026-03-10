@@ -5,7 +5,6 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import {initAuth} from './auth/auth.init';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {authInterceptor} from './auth/auth.interceptor';
 import {OAuthService, provideOAuthClient} from 'angular-oauth2-oidc';
