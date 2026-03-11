@@ -22,8 +22,8 @@
 
         <!-- Avatar -->
         <div class="avatar-wrapper">
-          @if (profilePicUrl()) {
-            <img class="avatar" [src]="profilePicUrl()" [alt]="profileUser()!.username + ' avatar'" />
+          @if (profileUser()!.profilePicUrl && profileUser()!.profilePicUrl !== "") {
+            <img class="avatar" [src]="profileUser()!.profilePicUrl" [alt]="profileUser()!.username + ' avatar'" />
           } @else {
             <div class="avatar avatar-placeholder">
               {{ (profileUser()!.username ?? '?')[0].toUpperCase() }}
@@ -33,12 +33,15 @@
 
         <!-- User Info -->
         <h2 class="profile-username">{{ profileUser()!.username }}</h2>
-        <p class="profile-email">{{ profileUser()!.email }}</p>
+
+        @if(isOwnProfile()){
+          <p class="profile-email">{{ profileUser()!.email }}</p>
+        }
 
         <div class="profile-meta">
-          <span class="profile-role" [ngClass]="'role-' + profileUser()!.role?.toLowerCase()">
-            {{ profileUser()!.role }}
-          </span>
+<!--          <span class="profile-role" [ngClass]="'role-' + profileUser()!.role?.toLowerCase()">-->
+<!--            {{ profileUser()!.role }}-->
+<!--          </span>-->
           <span class="profile-since">
             Joined {{ profileUser()!.createdAt | slice:0:10 }}
           </span>
@@ -117,16 +120,16 @@
           <div class="avatar-preview-wrap">
             @if (newAvatarPreview()) {
               <img class="avatar avatar--sm" [src]="newAvatarPreview()!" alt="New avatar preview" />
-            } @else if (profilePicUrl()) {
-              <img class="avatar avatar--sm" [src]="profilePicUrl()!" alt="Current avatar" />
-            } @else {
+            } @else if (profileUser()!.profilePicUrl && profileUser()!.profilePicUrl !== "") {
+              <img class="avatar" [src]="profileUser()!.profilePicUrl" [alt]="profileUser()!.username + ' avatar'" />
+            }  @else {
               <div class="avatar avatar--sm avatar-placeholder">
                 {{ (profileUser()!.username ?? '?')[0].toUpperCase() }}
               </div>
             }
           </div>
           <label class="btn btn-outline upload-btn" for="avatarInput">
-            📷 Change Picture
+             Change Picture
           </label>
           <input
             id="avatarInput"

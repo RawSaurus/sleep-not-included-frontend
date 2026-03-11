@@ -2,6 +2,7 @@ import {Component, computed, inject, input, OnInit, signal} from '@angular/core'
 import {RouterLink} from '@angular/router';
 import {BuildControllerService, BuildDetailResponse, BuildResponse} from '../../../api/build-service';
 import {AuthService} from '../../../auth/auth.service';
+import {UserControllerService} from '../../../api/user-service';
 
 @Component({
   selector: 'app-build-card',

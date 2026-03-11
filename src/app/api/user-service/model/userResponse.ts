@@ -17,6 +17,7 @@ export interface UserResponse {
     username?: string;
     email?: string;
     role?: UserResponse.RoleEnum;
+    profilePicUrl?: string;
     createdAt?: string;
 }
 export namespace UserResponse {

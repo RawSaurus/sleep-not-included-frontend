@@ -120,10 +120,12 @@
 
 .dropdown-menu a {
   display: block;
+  /*margin-left: 25px;*/
   padding: 10px 16px;
   font-size: 14px;
   color: #e2e8f0;
   transition: background 0.2s ease;
+  text-align: center;
 }
 
 .dropdown-menu a:hover {

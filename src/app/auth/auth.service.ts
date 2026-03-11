@@ -31,11 +31,14 @@ export class AuthService{
   }
 
   register(): void {
-    const issuer = this.oauthService.issuer;
-    const redirectUri = encodeURIComponent(window.location.origin + '/');
-    window.location.href =
-      `${issuer}/protocol/openid-connect/registrations` +
-      `?client_id=angular&response_type=code&redirect_uri=${redirectUri}`;
+    // const issuer = this.oauthService.issuer;
+    // const redirectUri = encodeURIComponent(window.location.origin + '/');
+    // window.location.href =
+    //   `${issuer}/protocol/openid-connect/registrations` +
+    //   `?client_id=angular&response_type=code&redirect_uri=${redirectUri}`;
+    this.oauthService.initCodeFlow('', {
+      kc_action: 'REGISTER'
+    });
   }
 
   logout(){

@@ -151,7 +151,7 @@ export class ProfileComponent implements OnInit{
         this.profileUser.set(user);
         this.isLoading.set(false);
         this.loadBuildsTab();
-        this.loadProfilePicture(user.username ?? '');
+        // this.loadProfilePicture(user.username ?? '');
       },
       error: () => {
         this.error.set('User not found.');
@@ -160,12 +160,12 @@ export class ProfileComponent implements OnInit{
     });
   }
 
-  private loadProfilePicture(username: string): void {
+  // private loadProfilePicture(username: string): void {
     // Profile pictures are stored under the user's username as PROFILE_PIC type
     // imageController.findByName not available - construct URL directly if needed
     // Using a placeholder approach; swap with real endpoint if exposed
-    this.profilePicUrl.set(null);
-  }
+    // this.profilePicUrl.set(null);
+  // }
 
   loadBuildsTab(): void {
     const user = this.profileUser();
