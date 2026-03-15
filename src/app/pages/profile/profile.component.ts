@@ -292,7 +292,7 @@ export class ProfileComponent implements OnInit{
       password,
     };
 
-    const updateUser$ = this.userController.updateUser(user.id, request);
+    const updateUser$ = this.userController.updateOwnUser(request);
     const avatarFile  = this.newAvatarFile();
 
     if (avatarFile) {

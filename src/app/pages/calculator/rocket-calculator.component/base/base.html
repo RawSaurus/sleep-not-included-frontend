@@ -53,8 +53,8 @@
       <label class="section-label-header">Oxidizer</label>
       <label class="section-label">Oxidizer Type</label>
       <select formControlName="oxidizerType" class="section-input">
-        @for(option of oxidizerOptions; track option.value) {
-          <option [value]="option.value">
+        @for(option of oxidizerOptions; track option.label) {
+          <option [value]="option.label">
             {{ option.label }}
           </option>
         }
