@@ -51,61 +51,84 @@ export class Base {
   oxidizerTankDryMass = 333;
   thrusterMass = 200;
 
+  selectedRange = signal(10000);
   selectedEngine = signal('Steam');
-
-  rocketForm: FormGroup = new FormGroup({
-    range: new FormGroup({
-      desiredRange: new FormControl(10000),
-    }),
-    engine: new FormGroup({
-      type: new FormControl<String>('Steam'),
-      solidFuelThrusters: new FormControl(0)
-    }),
-    fuel: new FormGroup({
-      fuelTanks: new FormControl(0),
-      fuelAmount: new FormControl(0)
-    }),
-    modules: new FormGroup({
-      commandCapsule: new FormControl(1),
-      cargoBay: new FormControl(0),
-      liquidCargoTank: new FormControl(0),
-      researchModule: new FormControl(0),
-      gasCargoTank: new FormControl(0),
-      biologicalCargoBay: new FormControl(0),
-      sightSeeingModule: new FormControl(0),
-    }),
-    oxidizer: new FormGroup({
-      oxidizerType: new FormControl('Liquid Oxygen'),
-      oxidizerTanks: new FormControl(0),
-      oxidizerAmount: new FormControl(0)
-    }),
-  });
+  selectedOxidizer = signal('Oxylite');
+  solidThruster = signal(0);
+  fuelTanks = signal(1);
+  fuelAmount = signal(0);
+  oxiTanks = signal(0);
+  oxiAmount = signal(0);
+  sCargoBays = signal(0);
+  lCargoBays = signal(0);
+  gCargoBays = signal(0);
+  bCargoBays = signal(0);
+  resModule = signal(0);
+  ssModule = signal(0);
 
   rangeOptions = [
     { label: '10 000 km', value: 10000 },
     { label: '20 000 km', value: 20000 }
   ];
   engineOptions = [
-    { label: 'Steam', efficiency: 20 },
-    { label: 'Petroleum', efficiency: 40 },
-    { label: 'Biodiesel', efficiency: 40 },
-    { label: 'Hydrogen', efficiency: 60 }
+    { label: 'Steam', efficiency: 20, mass: 2000 },
+    { label: 'Petroleum', efficiency: 40, mass: 200 },
+    { label: 'Biodiesel', efficiency: 40, mass: 200 },
+    { label: 'Hydrogen', efficiency: 60, mass: 500 }
   ];
   oxidizerOptions = [
-    { label: 'Oxylite', efficiency: 1.0 },
-    { label: 'Liquid oxygen', efficiency: 1.33 }
+    { label: 'Oxylite', efficiency: 1.0, capacity: 2700, dryMass: 100 },
+    { label: 'Liquid oxygen', efficiency: 1.33, capacity: 2700, dryMass: 100 }
   ];
   moduleOptions = [
-    { label: 'Cargo Bay', mass: 2000 },
-    { label: 'Liquid Cargo Tank', mass: 2000 },
-    { label: 'Gas Cargo Tank', mass: 2000 },
-    { label: 'Biological Cargo Bay', mass: 2000 },
+    { label: 'Cargo Bay', mass: 1000 },
+    { label: 'Liquid Cargo Tank', mass: 1000 },
+    { label: 'Gas Cargo Tank', mass: 1000 },
+    { label: 'Biological Cargo Bay', mass: 1000 },
     { label: 'Research Module', mass: 200 },
     { label: 'Sightseeing Module', mass: 200 },
   ]
 
 
   constructor() {
+  }
+
+  test(){
+    console.log(this.getModuleMass());
+    // console.log("Range pre penalty: ", this.getRangePrePenalty());
+    console.log("Final range: ", this.calc());
+  }
+
+  selectRange(range: number){
+    this.selectedRange.set(range);
+    console.log(this.selectedRange());
+  }
+
+  selectEngine(engineOption: string){
+    this.selectedEngine.set(engineOption);
+    console.log(engineOption);
+}
+
+  setSolidThrusters(st: number){
+    this.solidThruster.set(st);
+    console.log(this.solidThruster());
+  }
+
+  setFuelAmount(f: number){
+    this.fuelAmount.set(f);
+    this.fuelTanks.set(Math.ceil(f/900));
+    if(this.selectedEngine() === 'Steam'){
+      this.oxiAmount.set(0);
+      this.oxiTanks.set(0);
+    }else {
+      this.oxiAmount.set(f);
+      this.oxiTanks.set(Math.ceil(f / 2700));
+    }
+  }
+
+  setOxidizerAmount(o: number){
+    this.oxiAmount.set(o);
+    this.oxiTanks.set(Math.ceil(o/2700));
   }
 
 //   FORMULA
@@ -119,25 +142,63 @@ export class Base {
 //
 //   finalRange = nominalRange - massPenalty
 
-  calculate() {
-    const test = this.ENGINE_STATS;
-    const nominalRange = 543 * this.engineOptions[1].efficiency * this.oxidizerOptions[0].efficiency;
-    const dryMass = 2000 //engine
-    + 200 //command module
-    + 333 // fuel tank
-    + 333; // oxidizer tan
-    const totalWetMass = 600 + 1086 + 5000;
-    const linearPenalty = totalWetMass * 1;
-    const exponentialPenalty = Math.pow(totalWetMass / 300, 3.2);
-    const massPenalty = Math.max(linearPenalty, exponentialPenalty);
-    const finalRange = nominalRange - massPenalty;
-    const formValue = this.rocketForm.value;
+  calc(){
+    const totalWetMass = this.getModuleMass() + this.getFuelWetMass() + this.getWetOxidizerMass();
 
-    console.log('Dry mass: ', dryMass);
-    console.log('Total wet mass: ', totalWetMass);
-    console.log('Mass Penalty: ', massPenalty);
-    console.log('Rocket calculation: ', finalRange/1000);
+    // Select if linear or exponential penalty is greater
+    const massPenalty = Math.max(totalWetMass, Math.pow(totalWetMass / 300, 3.2));
 
+    return this.getRangePrePenalty() - massPenalty;
   }
 
+  private getRangePrePenalty(){
+    const fuelEff = this.engineOptions.filter(e =>
+      e.label === this.selectedEngine())[0].efficiency;
+    const oxiEff = this.oxidizerOptions.filter(o =>
+      o.label === this.selectedOxidizer())[0].efficiency;
+    console.log("Fuel eff: ", fuelEff);
+    console.log("Oxi eff: ", oxiEff);
+    return this.fuelAmount() * fuelEff * oxiEff;
+  }
+
+  calculate() {
+    const goalRange = 40000;
+    const fuelEff = this.engineOptions.filter(e =>
+      e.label === this.selectedEngine())[0].efficiency;
+    const oxiEff = this.oxidizerOptions.filter(o =>
+      o.label === this.selectedOxidizer())[0].efficiency;
+    let fuelTemp = this.fuelAmount();
+
+    const totalWetMass = this.getModuleMass() + this.getFuelWetMass() + this.getWetOxidizerMass();
+
+    const massPenalty = Math.max(totalWetMass, Math.pow(totalWetMass / 300, 3.2));
+
+    let finalRange = fuelTemp * oxiEff * fuelEff - massPenalty;
+
+    do{
+      fuelTemp += 1;
+      finalRange = fuelTemp * oxiEff * fuelEff - massPenalty;
+    }while(finalRange < goalRange)
+  }
+
+  protected readonly Number = Number;
+
+  private getModuleMass(){
+    return (this.sCargoBays()
+        + this.lCargoBays()
+        + this.gCargoBays()
+        + this.bCargoBays()) * 1000 //cargo bays mass
+      + (this.resModule() + this.ssModule()) * 200 // modules mass
+      + 200; // command module mass
+  }
+
+  private getFuelWetMass(){
+    return this.fuelTanks() * 100 //dry mass
+      + this.fuelAmount(); //wet mass
+  }
+
+  private getWetOxidizerMass(){
+    return this.oxiTanks() * 100 //dry mass
+      + this.oxiAmount(); //wet mass
+  }
 }

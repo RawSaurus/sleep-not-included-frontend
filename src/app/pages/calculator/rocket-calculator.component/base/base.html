@@ -1,9 +1,13 @@
-<form [formGroup]="rocketForm" (ngSubmit)="calculate()" class="calculator-form">
+<!--<form [formGroup]="rocketForm" (ngSubmit)="calculate()" class="calculator-form">-->
+<div class="calculator-form">
 
   <!-- Desired Range Section -->
-  <div formGroupName="range" class="calc-section">
+  <div  class="calc-section">
     <label class="section-label">Desired Range</label>
-    <select formControlName="desiredRange" class="section-input">
+    <select #range
+            (change)="selectRange(Number(range.value))"
+            class="section-input"
+    >
       @for(option of rangeOptions; track option.value) {
         <option [value]="option.value">
           {{ option.label }}
@@ -12,9 +16,9 @@
     </select>
   </div>
 
-  <div formGroupName="engine" class="calc-section">
+  <div class="calc-section">
     <label class="section-label">Engine</label>
-    <select formControlName="type" class="section-input">
+    <select #engine (change)="selectEngine(engine.value)" class="section-input">
       @for(option of engineOptions; track option.label) {
         <option [value]="option.label">
           {{ option.label }}
@@ -23,36 +27,42 @@
     </select>
     <label class="section-label">Solid fuel thrusters</label>
     <input
+      #st
       type="number"
-      formControlName="solidFuelThrusters"
       placeholder="0"
       class="section-input"
+      (input)="setSolidThrusters(st.valueAsNumber)"
     />
   </div>
 
   <!-- Fuel Section -->
-  <div formGroupName="fuel" class="calc-section">
+  <div class="calc-section">
     <label class="section-label">Fuel tanks</label>
     <input
       type="number"
-      formControlName="fuelTanks"
-      placeholder="Enter amount of tanks"
+      [value]="fuelTanks()"
       class="section-input"
+      disabled="disabled"
     />
     <label class="section-label">Fuel amount</label>
     <input
+      #fuelAmount
       type="number"
-      formControlName="fuelAmount"
-      placeholder="Enter fuel amount"
+      placeholder="0"
       class="section-input"
+      (input)="setFuelAmount(fuelAmount.valueAsNumber)"
     />
   </div>
 
-  @if (rocketForm.get("engine.type")?.value !== 'Steam') {
-    <div formGroupName="oxidizer" class="calc-section">
+<!--  Oxidizer -->
+  @if (selectedEngine() !== 'Steam') {
+    <div class="calc-section">
       <label class="section-label-header">Oxidizer</label>
       <label class="section-label">Oxidizer Type</label>
-      <select formControlName="oxidizerType" class="section-input">
+      <select #oxidizer
+              (change)="selectedOxidizer.set(oxidizer.value)"
+              class="section-input"
+      >
         @for(option of oxidizerOptions; track option.label) {
           <option [value]="option.label">
             {{ option.label }}
@@ -62,67 +72,96 @@
       <label class="section-label">Oxidizer Tanks</label>
       <input
         type="number"
-        formControlName="oxidizerTanks"
+        [value]="oxiTanks()"
         class="section-input"
+        disabled="disabled"
       />
       <label class="section-label">Fuel</label>
       <input
+        #oxiAm
         type="number"
-        formControlName="oxidizerAmount"
+        [value]="oxiAmount()"
         class="section-input"
+        (input)="setOxidizerAmount(oxiAm.valueAsNumber)"
+        disabled="disabled"
       />
     </div>
   }
 
-  <div formGroupName="modules" class="calc-section">
+  <div class="calc-section">
     <label class="section-label-header">Modules</label>
     <label class="section-label">Command Capsule</label>
     <input
       type="number"
-      formControlName="commandCapsule"
+      placeholder="1"
+      disabled="disabled"
       class="section-input"
     />
     <label class="section-label">Solid Cargo Bays</label>
     <input
+      #scb
       type="number"
-      formControlName="cargoBay"
       class="section-input"
+      min="0"
+      max="10"
+      [value]="sCargoBays()"
+      (input)="sCargoBays.set(scb.valueAsNumber)"
     />
     <label class="section-label">Liquid Cargo Tanks</label>
     <input
+      #lcb
       type="number"
-      formControlName="liquidCargoTank"
       class="section-input"
+      min="0"
+      max="10"
+      [value]="lCargoBays()"
+      (input)="lCargoBays.set(lcb.valueAsNumber)"
     />
     <label class="section-label">Research Modules</label>
     <input
+      #rm
       type="number"
-      formControlName="researchModule"
       class="section-input"
+      min="0"
+      max="10"
+      [value]="resModule()"
+      (input)="resModule.set(rm.valueAsNumber)"
     />
     <label class="section-label">Gas Cargo Canisters</label>
     <input
+      #gcb
       type="number"
-      formControlName="gasCargoTank"
       class="section-input"
+      min="0"
+      max="10"
+      [value]="gCargoBays()"
+      (input)="gCargoBays.set(gcb.valueAsNumber)"
     />
     <label class="section-label">Biological Cargo Bays</label>
     <input
+      #bcb
       type="number"
-      formControlName="biologicalCargoBay"
       class="section-input"
+      min="0"
+      max="10"
+      [value]="bCargoBays()"
+      (input)="bCargoBays.set(bcb.valueAsNumber)"
     />
     <label class="section-label">Sight-Seeing Modules</label>
     <input
+      #ssm
       type="number"
-      formControlName="sightSeeingModule"
       class="section-input"
+      min="0"
+      max="10"
+      [value]="ssModule()"
+      (input)="ssModule.set(ssm.valueAsNumber)"
     />
   </div>
 
   <!-- Action -->
-  <button type="submit" class="calculate-btn">
+  <button (click)="test()" type="submit" class="calculate-btn">
     Calculate
   </button>
 
-</form>
+</div>
