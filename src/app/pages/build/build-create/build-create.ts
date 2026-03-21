@@ -1,6 +1,6 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, input, OnInit, output, signal} from '@angular/core';
 import {Router} from '@angular/router';
-import {BuildControllerService} from '../../../api/build-service';
+import {BuildControllerService, BuildDetailResponse} from '../../../api/build-service';
 import {TagControllerService, TagResponse} from '../../../api/tag-service';
 import {ImageControllerService} from '../../../api/image-service';
 import {UserControllerService} from '../../../api/user-service';
@@ -19,6 +19,11 @@ const MAX_IMAGE_COUNT = 20;
   styleUrl: './build-create.css',
 })
 export class BuildCreate implements OnInit{
+
+  existingBuild = input<BuildDetailResponse | null>(null);
+  editCancelled = output<void>();
+  editSaved = output<BuildDetailResponse>();
+
   private router = inject(Router);
   private buildController = inject(BuildControllerService);
   private tagController = inject(TagControllerService);
@@ -39,6 +44,11 @@ export class BuildCreate implements OnInit{
   // Images
   thumbnailFile = signal<File | null>(null);
   thumbnailPreview = signal<string | null>(null);
+
+  // existingThumbnailUrl = signal<string | null>(null);
+  // existingImgUrls = signal<string[]>([]);
+  // imagesToDelete = signal<Set<string>>(new Set())
+
   buildImageFiles = signal<File[]>([]);
   buildImagePreviews = signal<string[]>([]);
 
@@ -52,6 +62,10 @@ export class BuildCreate implements OnInit{
 
   readonly maxImageCount = MAX_IMAGE_COUNT;
 
+  get isEditMode(){
+    return this.existingBuild !== null;
+  }
+
   ngOnInit(): void {
     this.tagController
       .findAll(0,50)
@@ -59,9 +73,33 @@ export class BuildCreate implements OnInit{
         next: (tags) => {
           console.log(tags);
           this.availableTags.set(tags.content ?? []);
+          this.prefillIfEditMode();
         },
         error: () => this.error.set('Failed to load tags.'),
       });
+
+    const build = this.existingBuild();
+    if(build){
+      this.name.set(build.name ?? '');
+      this.shortDescription.set(build.shortDescription ?? '');
+      this.description.set(build.description ?? '');
+      if(build.thumbnailUrl){
+        this.thumbnailPreview.set(build.thumbnailUrl);
+      }
+      if(build.imageUrls?.length){
+        this.buildImagePreviews.set([...build.imageUrls]);
+      }
+    }
+  }
+
+  private prefillIfEditMode(){
+    const build = this.existingBuild();
+    if(!build?.tags?.length) return;
+    const ids = new Set(
+      build.tags.map(t => t.id)
+        .filter((id): id is number => id != null)
+    );
+    this.selectedTagIds.set(ids);
   }
 
   toggleTag(tagId: number | undefined): void {
@@ -95,7 +133,6 @@ export class BuildCreate implements OnInit{
 
   onThumbnailSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0] ?? null;
-    console.log("File size: " + file?.size);
     this.setThumbnail(file);
   }
 
@@ -134,7 +171,6 @@ export class BuildCreate implements OnInit{
   onBuildImagesSelected(event: Event): void {
     const incoming = Array.from((event.target as HTMLInputElement).files ?? []);
     for(let i = 0; i<incoming.length; i++){
-      console.log("build image size: " + incoming[i].size);
     }
     this.addBuildImages(incoming);
     // Reset so the same file can be re-selected after removal
@@ -202,7 +238,11 @@ export class BuildCreate implements OnInit{
   }
 
   cancel(): void {
-    this.router.navigate(['/build']);
+    if(this.isEditMode){
+      this.editCancelled.emit();
+    }else {
+      this.router.navigate(['/build']);
+    }
   }
 
   submit(): void {
@@ -211,13 +251,60 @@ export class BuildCreate implements OnInit{
       return;
     }
 
-    if (this.buildImageFiles().length === 0) {
+    if (!this.isEditMode && this.buildImageFiles().length === 0) {
       this.error.set('At least one build image is required.');
       return;
     }
 
     this.isSubmitting.set(true);
     this.error.set(null);
+
+    if (this.isEditMode) {
+      this.submitUpdate();
+    } else {
+      this.submitCreate();
+    }
+  }
+
+  private submitUpdate() {
+    const build = this.existingBuild()!;
+
+    this.buildController.updateBuild(build.id!, {
+      name: this.name(),
+      shortDescription: this.shortDescription(),
+      description: this.description(),
+      tagId: Array.from(this.selectedTagIds()),
+    }).pipe(
+      switchMap((updated) => {
+        const buildName = updated.name!;
+        const uploads = [];
+
+        const thumbnail = this.thumbnailFile();
+        if(thumbnail){
+          uploads.push(this.uploadThumbnail(thumbnail, buildName));
+        }
+        const buildImages = this.buildImageFiles();
+        if(buildImages.length > 0){
+          uploads.push(this.uploadBuildImages(buildImages, buildName));
+        }
+
+        return uploads.length > 0 ? forkJoin(uploads) : of(null);
+      }),
+      switchMap(() => this.buildController.findBuildDetailsById(build.id!))
+    ).subscribe({
+      next: (refreshed) => {
+        this.isSubmitting.set(false);
+        this.editSaved.emit(refreshed);
+      },
+      error: (err) => {
+        console.error(err);
+        this.error.set(err.error?.bussinessErrorDescription ?? 'Failed To Update Build');
+        this.isSubmitting.set(false);
+      }
+    });
+  }
+
+  private submitCreate(){
 
     const profile = this.authService.userProfile;
     const username: string = profile?.['preferred_username'] ?? '';
@@ -227,7 +314,7 @@ export class BuildCreate implements OnInit{
       .findUserByName(username)
       .pipe(
         // 2. Create the build
-        switchMap((user) => {
+        switchMap(() => {
           return this.buildController.createBuild(
             {
               name: this.name(),

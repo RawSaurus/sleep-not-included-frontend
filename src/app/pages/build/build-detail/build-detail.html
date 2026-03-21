@@ -11,9 +11,23 @@
 }
 
 @if (build(); as b) {
-  <div class="container build-detail">
+  @if (editMode()) {
+    <app-build-create
+      [existingBuild]="b"
+      (editCancelled)="editMode.set(false)"
+      (editSaved)="onBuildUpdated($event)"
+    />
+  } @else {
+    <div class="container build-detail">
 
-    <h1>{{ b.name }}</h1>
+      <div class="build-detail-header">
+        <h1>{{ b.name }}</h1>
+        @if (isOwner()) {
+          <button class="btn btn-outline edit-build-btn" (click)="editMode.set(true)">
+             Edit Build
+          </button>
+        }
+      </div>
 
     <div class="build-meta">
 <!--      ❤️ {{ b.likes ?? 0 }} Likes-->
@@ -73,6 +87,7 @@
     <app-comment-section [buildId]="b.id!" />
 
   </div>
+  }
 }
 <!-- Lightbox overlay -->
 @if (lightboxUrl()) {

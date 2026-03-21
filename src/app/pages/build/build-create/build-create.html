@@ -1,7 +1,7 @@
 <div class="container create-page">
 
   <div class="create-header">
-    <h2>Create Build</h2>
+    <h2>{{ isEditMode ? 'Edit Build' : 'Create Build' }}</h2>
     <button class="btn btn-outline" (click)="cancel()">✕ Cancel</button>
   </div>
 
@@ -102,8 +102,11 @@
     <!-- Build Images -->
     <div class="field">
       <label class="field-label">
-        Build Images <span class="required">*</span>
-        <span class="image-count-badge">{{ buildImageFiles().length }} / {{ maxImageCount }}</span>
+        Build Images @if (!isEditMode) { <span class="required">*</span> }
+        <span class="image-count-badge">{{ buildImagePreviews().length }} / {{ maxImageCount }}</span>
+        @if (isEditMode) {
+          <span class="form-hint">(existing images shown — upload new files to add more)</span>
+        }
       </label>
       <div
         class="upload-area multi"
@@ -131,7 +134,10 @@
           @for (preview of buildImagePreviews(); track $index) {
             <div class="image-preview-item">
               <img [src]="preview" alt="Build image {{ $index + 1 }}" />
-              <button type="button" class="remove-img" (click)="removeBuildImage($index)">✕</button>
+              <!-- Only allow removing newly added files (not existing URLs) -->
+              @if ($index >= (existingBuild()?.imageUrls?.length ?? 0)) {
+                <button type="button" class="remove-img" (click)="removeBuildImage($index)">✕</button>
+              }
             </div>
           }
         </div>
@@ -147,7 +153,7 @@
         @if (isSubmitting()) {
           Saving...
         } @else {
-          Save Build
+          {{ isEditMode ? 'Save Changes' : 'Save Build' }}
         }
       </button>
     </div>

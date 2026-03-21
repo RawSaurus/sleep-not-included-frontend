@@ -1,7 +1,26 @@
 <!--<form [formGroup]="rocketForm" (ngSubmit)="calculate()" class="calculator-form">-->
+<div class="toggle-wrapper">
+
+  <!-- Toggle Switch -->
+  <div class="toggle-container" (click)="toggleCalc.set(!toggleCalc())">
+    <div class="toggle-label left" [class.active]="toggleCalc()">
+      Playground
+    </div>
+
+    <div class="toggle-switch">
+      <div class="toggle-knob" [class.move]="!toggleCalc()"></div>
+    </div>
+
+    <div class="toggle-label right" [class.active]="!toggleCalc()">
+      Fixed Ranges
+    </div>
+  </div>
+
+</div>
 <div class="calculator-form">
 
   <!-- Desired Range Section -->
+  @if(!toggleCalc()){
   <div  class="calc-section">
     <label class="section-label">Desired Range</label>
     <select #range
@@ -15,7 +34,17 @@
       }
     </select>
   </div>
-
+  }@else{
+    <div class="calc-section">
+    <label class="section-label">Max Range</label>
+      <input
+        type="text"
+        [value]="displayRange()"
+        class="section-input"
+        disabled="disabled"
+      />
+    </div>
+  }
   <div class="calc-section">
     <label class="section-label">Engine</label>
     <select #engine (change)="selectEngine(engine.value)" class="section-input">
@@ -29,9 +58,9 @@
     <input
       #st
       type="number"
-      placeholder="0"
+      [value]="solidBoosters()"
       class="section-input"
-      (input)="setSolidThrusters(st.valueAsNumber)"
+      (input)="solidBoosters.set(st.valueAsNumber)"
     />
   </div>
 
@@ -46,11 +75,11 @@
     />
     <label class="section-label">Fuel amount</label>
     <input
-      #fuelAmount
+      #fuelAm
       type="number"
-      placeholder="0"
+      [value]="fuelAmount()"
       class="section-input"
-      (input)="setFuelAmount(fuelAmount.valueAsNumber)"
+      (input)="setFuelAmount(fuelAm.valueAsNumber)"
     />
   </div>
 
@@ -160,7 +189,7 @@
   </div>
 
   <!-- Action -->
-  <button (click)="test()" type="submit" class="calculate-btn">
+  <button (click)="toggleCalculation()" type="submit" class="calculate-btn">
     Calculate
   </button>
 

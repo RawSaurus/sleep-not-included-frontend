@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
@@ -39,11 +39,24 @@ export class SpacedOut {
     }),
   });
 
-  rangeOptions = [
-    { label: '10 000 km', value: 10000 },
-    { label: '20 000 km', value: 20000 }
-  ];
-  engineOptions = [
+
+  selectedRange = signal(10000);
+  selectedEngine = signal('Steam');
+  solidBoosters = signal(0);
+  selectedOxidizer = signal('Oxylite');
+  solidThruster = signal(0);
+  fuelTanks = signal(1);
+  fuelAmount = signal(0);
+  oxiTanks = signal(0);
+  oxiAmount = signal(0);
+  sCargoBays = signal(0);
+  lCargoBays = signal(0);
+  gCargoBays = signal(0);
+  bCargoBays = signal(0);
+  resModule = signal(0);
+  ssModule = signal(0);
+
+  readonly engineOptions = [
     { label: 'Carbon Dioxide', power: 23, burden: 3, height: 2, maxHeight: 10, wattage: 0, fuelPerHex: 16.7, fuelTanks: 0, fuelCapacity: [100], range:[6]},
     { label: 'Large Carbon Dioxide', power: 23, burden: 3, height: 2, maxHeight: 10, wattage: 0, fuelPerHex:16.7, fuelTanks: 0, fuelCapacity: [500], range:[30]},
     { label: 'Sugar', power: 16, burden: 1, height: 3, maxHeight: 16, wattage: 60, fuelPerHex: 75, fuelTanks: 0, fuelCapacity: [450], range:[6]},
@@ -53,13 +66,13 @@ export class SpacedOut {
     { label: 'Radbolt', power: 34, burden: 5, height: 5, maxHeight: 20, wattage: 0, fuelPerHex: 200, fuelTanks: 0, fuelCapacity: [4000], range:[20]},
     { label: 'Hydrogen', power: 55, burden: 7, height: 5, maxHeight: 35, wattage: 600, fuelPerHex: 56.3, fuelTanks: 4, fuelCapacity: [900, 1800, 2700, 3600], range:[16, 32, 48, 64]}
   ];
-  fuelTankOptions =[
+  readonly fuelTankOptions =[
     { label: 'Large Liquid Fuel Tank', burden: 5, height: 5, capacity: 900 },
     { label: 'Small Solid Oxidizer Tank', burden: 2, height: 2, capacity: 450 },
     { label: 'Large Solid Oxidizer Tank', burden: 5, height: 5, capacity: 900 },
     { label: 'Liquid Oxidizer Tank', burden: 5, height: 2, capacity: 450 },
   ];
-  cargoModuleOptions = [
+  readonly cargoModuleOptions = [
     { label: 'Cargo Bay', burden: 4, height: 3, capacity: 12000 },
     { label: 'Large Cargo Bay', burden: 6, height: 5, capacity: 27000 },
     { label: 'Liquid Cargo Tank', burden: 3, height: 3, capacity: 9000 },
@@ -67,7 +80,7 @@ export class SpacedOut {
     { label: 'Gas Cargo Canister', burden: 2, height: 3, capacity: 3600 },
     { label: 'Large Gas Cargo Canister', burden: 4, height: 5, capacity: 11000 }
   ];
-  utilityModuleOptions = [
+  readonly utilityModuleOptions = [
     { label: 'Orbital Cargo Module', burden: 4, height: 2 },
     { label: 'Rover Module', burden: 4, height: 3 },
     { label: 'Trailblazer Module', burden: 4, height: 3 },
@@ -76,6 +89,12 @@ export class SpacedOut {
     { label: 'Solar Panel Module', burden: 1, height: 1 },
     { label: 'Artifact Transport Module', burden: 6, height: 1 },
   ];
+  readonly commandModules = [
+    { label: 'Solo Spacefarer Nosecone', burden: 3, height: 3 },
+    { label: 'Spacefarer Nosecone', burden: 6, height: 4 },
+    { label: 'Basic Nosecone', burden: 2, height: 2 },
+    { label: 'Drillcone', burden: 2, height: 4 },
+  ]
 
   rocket: string[] = [];
 

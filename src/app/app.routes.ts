@@ -6,6 +6,7 @@ export const routes: Routes = [
   { path: 'build', loadComponent: () => import('./pages/build/build').then(m => m.Build) },
   { path: 'build/create', loadComponent: () => import('./pages/build/build-create/build-create').then(m => m.BuildCreate) },
   { path: 'build/:id', loadComponent: () => import('./pages/build/build-detail/build-detail').then(m => m.BuildDetail) },
+  { path: 'blueprint', loadComponent: () => import('./pages/blueprint/blueprint').then(m => m.Blueprint)},
   {
     path: 'calculator/rocket',
     loadComponent: () =>

@@ -3,12 +3,14 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {BuildControllerService, BuildDetailResponse, BuildResponse} from '../../../api/build-service';
 import {AuthService} from '../../../auth/auth.service';
 import {CommentSection} from './comment-section/comment-section';
+import {BuildCreate} from '../build-create/build-create';
 
 @Component({
   selector: 'app-build-detail',
   imports: [
     CommentSection,
-    RouterLink
+    RouterLink,
+    BuildCreate
   ],
   templateUrl: './build-detail.html',
   styleUrl: './build-detail.css',
@@ -30,6 +32,9 @@ export class BuildDetail implements OnInit{
 
   lightboxUrl = signal<string | null>(null);
 
+  editMode = signal(false);
+  isOwner = signal(false);
+
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
   }
@@ -42,12 +47,26 @@ export class BuildDetail implements OnInit{
         next: (res) => {
           this.build.set(res);
           this.isLoading.set(false);
+          this.checkOwnership(res);
         },
         error: () => {
           this.error.set('Build not found or failed to load.');
           this.isLoading.set(false);
         }
       });
+  }
+
+  private checkOwnership(build: BuildDetailResponse): void {
+    if (!this.isLoggedIn) return;
+    const profile = this.authService.userProfile;
+    if (!profile) return;
+    const username: string = profile['preferred_username'];
+    this.isOwner.set(build.creatorName === username);
+  }
+
+  onBuildUpdated(updated: BuildDetailResponse){
+    this.build.set(updated);
+    this.editMode.set(false);
   }
 
   openLightbox(url: string): void {

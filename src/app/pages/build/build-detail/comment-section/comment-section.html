@@ -5,7 +5,7 @@
     <div class="comment-input-area">
       <textarea
         class="comment-textarea"
-        placeholder="Add a comment..."
+        placeholder="Add a comment…"
         rows="3"
         [value]="newCommentBody()"
         (input)="newCommentBody.set($any($event.target).value)"
@@ -17,211 +17,22 @@
           (click)="submitComment()"
           [disabled]="!newCommentBody().trim() || isSubmitting()"
         >
-          {{ isSubmitting() ? 'Posting...' : 'Post' }}
+          {{ isSubmitting() ? 'Posting…' : 'Post' }}
         </button>
       </div>
     </div>
   }
 
   <div class="comment-list" (scroll)="onScroll($event)">
+
     @for (comment of comments(); track comment.id) {
-      <div class="comment-item">
-        <div class="comment-avatar">
-          {{ comment.username?.charAt(0)?.toUpperCase() ?? '?' }}
-        </div>
-        <div class="comment-content">
-          <div class="comment-meta">
-            <span class="comment-username">{{ comment.username }}</span>
-            <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
-            <span class="comment-likes">❤️ {{ comment.likes ?? 0 }}</span>
-          </div>
-
-          <!-- Edit mode -->
-          @if (editingCommentId() === comment.id) {
-            <div class="edit-area">
-              <textarea
-                class="comment-textarea"
-                rows="3"
-                [value]="editBody()"
-                (input)="editBody.set($any($event.target).value)"
-                [disabled]="editSubmitting()"
-              ></textarea>
-              <div class="edit-actions">
-                <button class="btn-action btn-cancel" (click)="cancelEdit()" [disabled]="editSubmitting()">
-                  Cancel
-                </button>
-                <button
-                  class="btn-action btn-save"
-                  (click)="submitEdit(comment)"
-                  [disabled]="!editBody().trim() || editSubmitting()"
-                >
-                  {{ editSubmitting() ? 'Saving...' : 'Save' }}
-                </button>
-              </div>
-            </div>
-          } @else {
-            <p class="comment-body">{{ comment.body }}</p>
-          }
-
-          <!-- Delete confirm -->
-          @if (deletingCommentId() === comment.id) {
-            <div class="delete-confirm">
-              <span class="delete-confirm-text">Delete this comment?</span>
-              <button class="btn-action btn-cancel" (click)="cancelDelete()">Cancel</button>
-              <button class="btn-action btn-delete-confirm" (click)="submitDelete(comment.id!)">Delete</button>
-            </div>
-          }
-
-          <!-- Action row -->
-          @if (editingCommentId() !== comment.id && deletingCommentId() !== comment.id) {
-            <div class="comment-actions">
-              @if (comment.numOfResponses! > 0) {
-                <button
-                  class="btn-pill"
-                  [class.active]="isExpanded(comment.id!)"
-                  (click)="toggleResponses(comment)"
-                >
-                  <span class="pill-arrow">{{ isExpanded(comment.id!) ? '▾' : '▸' }}</span>
-                  {{ comment.numOfResponses ?? 0 }} Responses
-                </button>
-              }
-
-              @if (isLoggedIn) {
-                <button
-                  class="btn-pill btn-reply"
-                  [class.active]="activeReplyId() === comment.id"
-                  (click)="toggleReplyBox(comment.id!)"
-                >
-                  ↩ Reply
-                </button>
-              }
-
-              @if (isOwner(comment)) {
-                <button class="btn-pill btn-edit" (click)="startEdit(comment)">
-                   Edit
-                </button>
-                <button class="btn-pill btn-delete" (click)="confirmDelete(comment.id!)">
-                   Delete
-                </button>
-              }
-            </div>
-          }
-
-          <!-- Reply input box -->
-          @if (activeReplyId() === comment.id) {
-            <div class="reply-input-area">
-              <textarea
-                class="comment-textarea reply-textarea"
-                rows="2"
-                placeholder="Write a reply..."
-                [value]="getReplyDraft(comment.id!)"
-                (input)="setReplyDraft(comment.id!, $any($event.target).value)"
-                [disabled]="isReplySubmitting(comment.id!)"
-              ></textarea>
-              <div class="edit-actions">
-                <button class="btn-action btn-cancel" (click)="toggleReplyBox(comment.id!)">
-                  Cancel
-                </button>
-                <button
-                  class="btn-action btn-save"
-                  (click)="submitReply(comment)"
-                  [disabled]="!getReplyDraft(comment.id!).trim() || isReplySubmitting(comment.id!)"
-                >
-                  {{ isReplySubmitting(comment.id!) ? 'Posting...' : 'Reply' }}
-                </button>
-              </div>
-            </div>
-          }
-
-          <!-- Responses list -->
-          @if (isExpanded(comment.id!)) {
-            <div class="responses-area">
-              @if (isLoadingResponse(comment.id!)) {
-                <p class="loading-responses">Loading responses...</p>
-              } @else {
-                @for (response of getResponses(comment.id!); track response.id) {
-                  <div class="response-item">
-                    <div class="response-avatar">
-                      {{ response.username?.charAt(0)?.toUpperCase() ?? '?' }}
-                    </div>
-                    <div class="response-content">
-                      <div class="comment-meta">
-                        <span class="comment-username">{{ response.username }}</span>
-                        <span class="comment-date">{{ formatDate(response.createdAt) }}</span>
-                        <span class="comment-likes">❤️ {{ response.likes ?? 0 }}</span>
-                      </div>
-                      <p class="comment-body">{{ response.body }}</p>
-                    </div>
-                    <!-- Action row -->
-                    @if (editingCommentId() !== response.id && deletingCommentId() !== response.id) {
-                      <div class="comment-actions">
-                        @if (response.numOfResponses! > 0) {
-                          <button
-                            class="btn-pill"
-                            [class.active]="isExpanded(response.id!)"
-                            (click)="toggleResponses(response)"
-                          >
-                            <span class="pill-arrow">{{ isExpanded(response.id!) ? '▾' : '▸' }}</span>
-                            {{ response.numOfResponses ?? 0 }} Responses
-                          </button>
-                        }
-
-                        @if (isLoggedIn) {
-                          <button
-                            class="btn-pill btn-reply"
-                            [class.active]="activeReplyId() === response.id"
-                            (click)="toggleReplyBox(response.id!)"
-                          >
-                            ↩ Reply
-                          </button>
-                        }
-
-                        @if (isOwner(response)) {
-                          <button class="btn-pill btn-edit" (click)="startEdit(response)">
-                            Edit
-                          </button>
-                          <button class="btn-pill btn-delete" (click)="confirmDelete(response.id!)">
-                            Delete
-                          </button>
-                        }
-                      </div>
-                    }
-
-                    <!-- Reply input box -->
-                    @if (activeReplyId() === response.id) {
-                      <div class="reply-input-area">
-              <textarea
-                class="comment-textarea reply-textarea"
-                rows="2"
-                placeholder="Write a reply..."
-                [value]="getReplyDraft(response.id!)"
-                (input)="setReplyDraft(response.id!, $any($event.target).value)"
-                [disabled]="isReplySubmitting(response.id!)"
-              ></textarea>
-                        <div class="edit-actions">
-                          <button class="btn-action btn-cancel" (click)="toggleReplyBox(response.id!)">
-                            Cancel
-                          </button>
-                          <button
-                            class="btn-action btn-save"
-                            (click)="submitReply(response)"
-                            [disabled]="!getReplyDraft(response.id!).trim() || isReplySubmitting(response.id!)"
-                          >
-                            {{ isReplySubmitting(response.id!) ? 'Posting...' : 'Reply' }}
-                          </button>
-                        </div>
-                      </div>
-                    }
-                  </div>
-                }
-                @if (getResponses(comment.id!).length === 0) {
-                  <p class="no-responses">No responses yet.</p>
-                }
-              }
-            </div>
-          }
-        </div>
-      </div>
+      <app-comment-item
+        [comment]="comment"
+        [buildId]="buildId"
+        [currentUserId]="currentUserId()"
+        [depth]="0"
+        (deleted)="onCommentDeleted($event)"
+      />
     }
 
     @if (isLoadingComments()) {
@@ -239,5 +50,6 @@
     @if (!isLoadingComments() && comments().length === 0) {
       <p class="no-comments">No comments yet. Be the first to comment!</p>
     }
+
   </div>
 </section>

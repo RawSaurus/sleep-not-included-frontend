@@ -2,6 +2,22 @@
   max-width: 900px;
 }
 
+.build-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.build-detail-header h1 {
+  margin: 0;
+}
+
+.edit-build-btn {
+  flex-shrink: 0;
+}
+
 .build-detail-img {
   width: 20%;
   border-radius: 16px;

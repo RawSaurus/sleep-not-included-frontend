@@ -19,5 +19,6 @@ export interface CommentResponse {
     likes?: number;
     createdAt?: string;
     numOfResponses?: number;
+    isLiked?: boolean;
 }
 

@@ -15,8 +15,8 @@ import { SortObject } from './sortObject';
 
 
 export interface PageCommentResponse { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<CommentResponse>;
     number?: number;

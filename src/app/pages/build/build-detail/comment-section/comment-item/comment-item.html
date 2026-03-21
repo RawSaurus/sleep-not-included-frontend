@@ -1,0 +1,138 @@
+<div class="comment-item" [class.is-reply]="depth > 0">
+
+  <div class="comment-avatar" [style.width.px]="depth > 0 ? 28 : 36" [style.height.px]="depth > 0 ? 28 : 36">
+    {{ comment.username?.charAt(0)?.toUpperCase() ?? '?' }}
+  </div>
+
+  <div class="comment-content">
+
+    <!-- Meta -->
+    <div class="comment-meta">
+      <span class="comment-username">{{ comment.username }}</span>
+      <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+      @if (isLoggedIn) {
+        <button
+          class="like-btn"
+          [class.liked]="isLiked()"
+          (click)="toggleLike()"
+          [attr.aria-label]="isLiked() ? 'Unlike' : 'Like'"
+        >
+          <span class="heart-icon">{{ isLiked() ? '❤️' : '🤍' }}</span>
+          {{ likesCount() }}
+        </button>
+      } @else {
+        <span class="likes-display">❤️ {{ likesCount() }}</span>
+      }
+    </div>
+
+    <!-- Body or Edit Area -->
+    @if (isEditing()) {
+      <div class="edit-area">
+        <textarea
+          class="comment-textarea"
+          rows="3"
+          [value]="editBody()"
+          (input)="editBody.set($any($event.target).value)"
+          [disabled]="isSubmittingEdit()"
+        ></textarea>
+        <div class="edit-actions">
+          <button class="btn-action btn-cancel" (click)="cancelEdit()" [disabled]="isSubmittingEdit()">
+            Cancel
+          </button>
+          <button
+            class="btn-action btn-save"
+            (click)="submitEdit()"
+            [disabled]="!editBody().trim() || isSubmittingEdit()"
+          >
+            {{ isSubmittingEdit() ? 'Saving…' : 'Save' }}
+          </button>
+        </div>
+      </div>
+    } @else {
+      <p class="comment-body">{{ body() }}</p>
+    }
+
+    <!-- Delete confirm -->
+    @if (isConfirmingDelete()) {
+      <div class="delete-confirm">
+        <span class="delete-confirm-text">Delete this comment?</span>
+        <button class="btn-action btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-action btn-delete-confirm" (click)="submitDelete()">Delete</button>
+      </div>
+    }
+
+    <!-- Action row -->
+    @if (!isEditing() && !isConfirmingDelete()) {
+      <div class="comment-actions">
+
+        <!-- Toggle responses button -->
+        @if (numOfResponses() > 0) {
+          <button class="btn-pill" [class.active]="isExpanded()" (click)="toggleResponses()">
+            <span class="pill-arrow">{{ isExpanded() ? '▾' : '▸' }}</span>
+            {{ numOfResponses() }} {{ numOfResponses() === 1 ? 'Reply' : 'Replies' }}
+          </button>
+        }
+
+        <!-- Reply -->
+        @if (canReply) {
+          <button class="btn-pill btn-reply" [class.active]="isReplying()" (click)="toggleReply()">
+            ↩ Reply
+          </button>
+        }
+
+        <!-- Edit / Delete (owner only) -->
+        @if (isOwner && !isEditing()) {
+          <button class="btn-pill btn-edit" (click)="startEdit()">Edit</button>
+          <button class="btn-pill btn-delete" (click)="confirmDelete()">Delete</button>
+        }
+
+      </div>
+    }
+
+    <!-- Reply input box -->
+    @if (isReplying()) {
+      <div class="reply-input-area">
+        <textarea
+          class="comment-textarea reply-textarea"
+          rows="2"
+          placeholder="Write a reply…"
+          [value]="replyBody()"
+          (input)="replyBody.set($any($event.target).value)"
+          [disabled]="isSubmittingReply()"
+        ></textarea>
+        <div class="edit-actions">
+          <button class="btn-action btn-cancel" (click)="toggleReply()">Cancel</button>
+          <button
+            class="btn-action btn-save"
+            (click)="submitReply()"
+            [disabled]="!replyBody().trim() || isSubmittingReply()"
+          >
+            {{ isSubmittingReply() ? 'Posting…' : 'Reply' }}
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Responses (recursive) -->
+    @if (isExpanded()) {
+      <div class="responses-area">
+        @if (isLoadingResponses()) {
+          <p class="loading-responses">Loading replies…</p>
+        } @else if (responses().length === 0) {
+          <p class="no-responses">No replies yet.</p>
+        } @else {
+          @for (response of responses(); track response.id) {
+            <app-comment-item
+              [comment]="response"
+              [buildId]="buildId"
+              [currentUserId]="currentUserId"
+              [depth]="depth + 1"
+              (deleted)="onChildDeleted($event)"
+            />
+          }
+        }
+      </div>
+    }
+
+  </div>
+</div>
