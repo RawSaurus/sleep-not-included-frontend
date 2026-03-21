@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {BuildControllerService, BuildDetailResponse, BuildResponse} from '../../../api/build-service';
 import {AuthService} from '../../../auth/auth.service';
@@ -34,6 +34,8 @@ export class BuildDetail implements OnInit{
 
   editMode = signal(false);
   isOwner = signal(false);
+
+  displayTags = computed(() => (this.build()!.tags ?? []).slice(0, 5));
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;

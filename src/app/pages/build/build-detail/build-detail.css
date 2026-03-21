@@ -58,6 +58,31 @@
   transform: scale(1.02);
 }
 
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: var(--bg-700, #2a2a3a);
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--primary, #3db4f2);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.tag--empty {
+  color: var(--text-secondary, #8b8fa8);
+  opacity: 0.45;
+  font-style: italic;
+  background: transparent;
+  border: 1px dashed var(--bg-700, #2a2a3a);
+}
+
 /* ── Lightbox ─────────────────────────────────────────── */
 .lightbox-overlay {
   position: fixed;

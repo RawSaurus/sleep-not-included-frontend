@@ -44,9 +44,18 @@
       <img [src]="b.thumbnailUrl" class="build-detail-img" alt="Build thumbnail" />
     }
 
-    <div class="tags">
-      @for (tag of b.tags; track tag.id) {
-        <span class="tag">{{ tag.name }}</span>
+<!--    <div class="tags">-->
+<!--      @for (tag of b.tags; track tag.id) {-->
+<!--        <span class="tag">{{ tag.name }}</span>-->
+<!--      }-->
+<!--    </div>-->
+    <div class="card-tags">
+      @if (displayTags().length > 0) {
+        @for (tag of displayTags(); track tag.id) {
+          <span class="tag">{{ tag.name }}</span>
+        }
+      } @else {
+        <span class="tag tag--empty">No tags</span>
       }
     </div>
 
